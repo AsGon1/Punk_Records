@@ -1,7 +1,7 @@
 let query = `
 query ($search: String!) {
   Page {
-    media(search: $search, type: MANGA) {
+    media(search: $search, isAdult: false, type: MANGA) {
         id
         title {
             romaji
@@ -11,12 +11,30 @@ query ($search: String!) {
         format
         status
         startDate {
+            day
+            month
             year
         }
         coverImage {
             large
         }
         description
+        genres
+        characters(sort: [ROLE, RELEVANCE, ID]) {
+            nodes {
+                image {
+                    large
+                    medium
+                    }
+                name {
+                    first
+                    last
+                    alternative
+                }
+            }
+        }
+        chapters
+        volumes
     }
   }
 }
@@ -46,9 +64,34 @@ query ($search: String!) {
 }
 `;
 
+let query3 = `
+query ($search: String!){
+  Page{
+    characters(search: $search) {
+        id
+        name {
+            first
+            last
+        }
+        age
+        gender
+        image{
+            large
+            medium
+        }
+        description
+        dateOfBirth {
+            day
+            month
+        }
+    }
+  }
+}
+`;
+
 // Define our query variables and values that will be used in the query request
 let variables = {
-    search: "Dragon Ball"
+    search: "Naruto"
 };
 
 // Define the config we'll need for our Api request
@@ -60,7 +103,7 @@ let url = 'https://graphql.anilist.co',
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: query2,
+            query: query,
             variables: variables
         })
     };
