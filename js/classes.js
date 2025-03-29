@@ -1,6 +1,6 @@
 class Manga {
 
-    constructor(id, title, format = "Manga", chapters, volumes,status, startDate, coverImage, description, genres, characters){
+    constructor(id, title, format = "Manga", chapters, volumes, status, startDate, coverImage, description, genres, characters){
 
         this.id = id;
         this.title = title;
@@ -54,7 +54,7 @@ class Manga {
 
 class Anime {
 
-    constructor(id, title, format = "Anime", episodes, duration,status, startDate, coverImage, description, genres, characters){
+    constructor(id, title, format = "Anime", episodes, duration, status, startDate, coverImage, description, genres, characters){
 
         this.id = id;
         this.title = title;
@@ -89,7 +89,7 @@ class Anime {
         this.fav = false;
     }
 
-    // FUNCION GUARDAR FAVORITOS
+    // FUNCION GUARDAR VISTO
     saveWatched() {
         if(this.watched) {
             return;
@@ -97,7 +97,7 @@ class Anime {
         this.watched = true;
     }
 
-    // FUNCION BORRAR FAVORITOS
+    // FUNCION BORRAR VISTO
     removeWatched() {
         if(!this.watched) {
             return;

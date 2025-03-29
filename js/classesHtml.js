@@ -1,4 +1,5 @@
 import { Manga, Anime, Character } from "./classes.js";
+import { addToLocalStorageArray, getMangaFromLocalStorage, getAnimeFromLocalStorage, removeFromLocalStorageArray, findInLocalStorageArray } from "./localstorage.js";
 
 
 class MangaHTML extends Manga {
@@ -44,14 +45,15 @@ class MangaHTML extends Manga {
         this.article.classList.remove("readmark");
     }
 
-    // VISUALIZACION DE ELEMENTOS. Tarjetas de libros
+    // VISUALIZACION DE ELEMENTOS. Tarjetas de mangas
     render() {
-        const isBookmark = findInLocalStorageArray("favoriteMangas", this);
+        const isBookmark = findInLocalStorageArray("favoriteReadMangas", this);
+        const isNotBookmark = findInLocalStorageArray("favoriteNoReadMangas", this);
         this.article.innerHTML = "";
 
         const image = document.createElement("img");
         const attributesTitle = document.createElement("h3");
-        const attributeFormat = document.createElement("h4");
+        const attributesFormat = document.createElement("h4");
 
         const attributeList = document.createElement("ul");
         const attributesStartDate = document.createElement("li");
@@ -60,58 +62,79 @@ class MangaHTML extends Manga {
         const attributesDescription = document.createElement("li");
 
         const attributesGenres = document.createElement("ul");
-        attributesGenres.style.display = "none";
+        const attributesCharacters = document.createElement("ul");
 
         const favButton = document.createElement("button");
+        const readButton = document.createElement("button");
 
         image.setAttribute("src", this.coverImage.large);
         attributesTitle.textContent = this.title;
+        attributesFormat.textContent = this.format;
 
         attributeList.classList.add("Manga__attributes");
 
-        attributeAuthors.classList.add("attribute", "author");
-        attributeAuthors.textContent = "Autorx: " + this.authorsNames(this.authors);
+        attributesStartDate.classList.add("attribute", "date");
+        attributesStartDate.textContent = "Publishing Date: " + this.publisherDate;
 
-        attributesPublisherDate.classList.add("attribute", "date");
-        attributesPublisherDate.textContent = "Fecha de publicación: " + this.publisherDate;
+        attributesChapters.classList.add("attribute", "chapters");
+        attributesChapters.textContent = "Chapters: " + this.chapters;
 
-        attributesPageCount.classList.add("attribute", "pages");
-        attributesPageCount.textContent = "Páginas: " + this.pageCount;
-
-        attributesLanguage.classList.add("attribute", "language");
-        attributesLanguage.textContent = "Idioma: " + this.language;
+        attributesVolumes.classList.add("attribute", "volumes");
+        attributesVolumes.textContent = "Volumes: " + this.volumes;
 
         attributesDescription.classList.add("attribute", "description");
-        attributesDescription.textContent = "Sinopsis: " + this.description;
+        attributesDescription.textContent = "Description: " + this.description;
 
-        attributesCategories.classList.add("attribute", "categories");
-        attributesCategories.textContent = this.createCategories(attributesCategories);
 
-        attributesInfoLink.classList.add("attribute", "info");
-        attributesInfoLink.textContent = "MÁS INFO";
-        attributesInfoLink.setAttribute("href", this.infoLink);
-        attributesInfoLink.setAttribute("target", "_blank");
-
-        if (isBookmark) {
-            wishButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+        if (isBookmark || isNotBookmark) {
+            favButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-</svg>`; // TODO INNERHTML icono
+</svg>`;
         } else {
-            wishButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+            favButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
   <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-</svg>`; // TODO INNERHTML icono
+</svg>`;
         }
 
-        wishButton.addEventListener("click", () => {
+        favButton.addEventListener("click", () => {
             if (isBookmark) {
                 this.removeFav();
-                removeFromLocalStorageArray("favorites", this);
-				const wishlistLocalStorage = getFromLocalStorage("favorites") || [];
-				displayFavoriteBooks(wishlistLocalStorage);
+                removeFromLocalStorageArray("favoriteReadMangas", this);
             } else {
                 this.saveFav();
-                console.log(this);
-                addToLocalStorageArray("favorites", this);
+                addToLocalStorageArray("favoriteNoReadMangas", this);
+            }
+
+            if (isNotBookmark){
+                this.removeFav();
+                removeFromLocalStorageArray("favoriteNoReadMangas", this);
+            }else{
+                this.saveFav();
+                addToLocalStorageArray("favoriteNoReadMangas", this);
+            }
+            const favReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];
+            const favNoReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteNoReadMangas") || [];
+            displayFavoriteMangas(favReadMangaListLocalStorage, favNoReadMangaListLocalStorage);
+            this.render();
+        })
+
+        if (isBookmark) {
+            readButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/></svg>`;
+        } else if (isNotBookmark || !this.read){
+            readButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+</svg>`;
+        }
+
+        readButton.addEventListener("click", () => {
+            if (isBookmark) {
+                this.removeRead();
+                removeFromLocalStorageArray("favoriteReadMangas", this);
+                addToLocalStorageArray("favoriteNoReadMangas", this);
+                const favMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];
+				displayFavorites(favMangaListLocalStorage);
+            } else {
+                this.saveRead();
             }
             this.render();
         })
@@ -120,48 +143,33 @@ class MangaHTML extends Manga {
 
         this.article.appendChild(image);
         this.article.appendChild(attributesTitle);
-        this.article.appendChild(attributeAuthors);
+        this.article.appendChild(attributesFormat);
         this.article.appendChild(attributeList);
 
         // CREACION DE LISTA DE CATEGORIAS
-        if (attributesCategories.length === 1) { // SI SOLO HAY UNA CATEGORIA SE CREA UN ELEMENTO "A"
-            const category = document.createElement("a");
+        if (attributesGenres.length === 1) { // SI SOLO HAY UNA CATEGORIA SE CREA UN ELEMENTO "A"
+            const genre = document.createElement("h5");
         } else {
-            this.createCategories(attributesCategories);
+            this.createCategories(attributesGenres);
         }
-        this.article.appendChild(attributesCategories);
+        this.article.appendChild(attributesGenres);
 
         this.article.appendChild(wishButton);
         
-        this.article.appendChild(attributesInfoLink);
+        this.article.appendChild(readButton);
     }
 
-    // AÑADIDO DE NOMBRES DE AUTORES A UN MISMO STRING
-    authorsNames(array) {
-        let authorsNamesString = "";
-
-        if (array.length === 1) {
-            return array[0];
-        }
-
-        for (let i = 0; i < array.length; i++) {
-            authorsNamesString += array[i] + (i === array.length - 1) ? "" : ", ";
-        }
-
-        return authorsNamesString;
-    }
-
-    // AÑADIDO DE TODAS LAS CATEGORIAS A LA LISTA EN FUNCION DE LA CANTIDAD
-    createCategories(attributesCategories) {
-        for (let i = 0; i < this.categories.length; i++) {
-            const category = document.createElement("li");
-            category.classList.add("attribute", "category");
+    // AÑADIDO DE TODAS LOS GENEROS A LA LISTA EN FUNCION DE LA CANTIDAD
+    createGenres(attributesGenres) {
+        for (let i = 0; i < this.genres.length; i++) {
+            const genre = document.createElement("li");
+            category.classList.add("attribute", "genre");
             if (i === 0) {
-                category.textContent = "Géneros: " + this.categories[i];
+                category.textContent = "Genres: " + this.categories[i];
             } else {
             category.textContent += this.categories[i];
             }
-            attributesCategories.append(category);
+            attributesGenres.append(genre);
         }
     }
 }
