@@ -33,10 +33,10 @@ function displayBook(books) {
 }
 
 function displayFavoriteMangas(readMangas, noReadMangas) {
-    const resultSection = document.getElementById("favorite__mangass");
+    const resultSection = document.getElementById("favorite__mangas");
     resultSection.innerHTML = "";
     readMangas.forEach(manga => {
-        if (!manga.imageLinks) { //si no hay foto, no lo enseñes
+        if (!manga.coverImage.large) { //si no hay foto, no lo enseñes
             return
         } else {
             manga.initialize(resultSection);
@@ -44,7 +44,7 @@ function displayFavoriteMangas(readMangas, noReadMangas) {
     });
 
     noReadMangas.forEach(manga => {
-        if (!manga.imageLinks) { //si no hay foto, no lo enseñes
+        if (!manga.coverImage.large) { //si no hay foto, no lo enseñes
             return
         } else {
             manga.initialize(resultSection);

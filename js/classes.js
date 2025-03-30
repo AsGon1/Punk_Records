@@ -1,6 +1,6 @@
 class Manga {
 
-    constructor(id, title, format = "Manga", chapters, volumes, status, startDate, coverImage, description, genres, characters){
+    constructor(id, title, format = "Manga", chapters, volumes, status, startDate, coverImage, description, genres){
 
         this.id = id;
         this.title = title;
@@ -10,7 +10,6 @@ class Manga {
         this.coverImage = coverImage; // Objeto que guarda las cover image (extra large, large y medium)
         this.description = description;
         this.genres = genres; // array que guarda los generos de la obra
-        this.characters = characters; //array que guarda objetos con la informacion de los personajes
         this.chapters = chapters; // numero de capitulos de la obra
         this.volumes = volumes || status; // numero de volumenes si esta acabada o su estado en caso contrario
 
@@ -54,7 +53,7 @@ class Manga {
 
 class Anime {
 
-    constructor(id, title, format = "Anime", episodes, duration, status, startDate, coverImage, description, genres, characters){
+    constructor(id, title, format = "Anime", episodes, duration, status, startDate, coverImage, description, genres){
 
         this.id = id;
         this.title = title;
@@ -64,7 +63,6 @@ class Anime {
         this.coverImage = coverImage; // Objeto que guarda las cover image (extra large, large y medium)
         this.description = description;
         this.genres = genres; // array que guarda los generos de la serie
-        this.characters = characters; //array que guarda objetos con la informacion de los personajes
         this.episodes = episodes; // numero de capitulos de la obra
         this.duration = duration; // duracion media de los capitulos
 
