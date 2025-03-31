@@ -52,6 +52,26 @@ function displayFavoriteMangas(readMangas, noReadMangas) {
     });
 }
 
+function displayFavoriteAnimes(viewedAnimes, noViewedAnimes) {
+    const resultSection = document.getElementById("favorite__Animes");
+    resultSection.innerHTML = "";
+    viewedAnimes.forEach(anime => {
+        if (!anime.coverImage.large) { //si no hay foto, no lo enseñes
+            return
+        } else {
+            anime.initialize(resultSection);
+        }
+    });
+
+    noViewedAnimes.forEach(anime => {
+        if (!anime.coverImage.large) { //si no hay foto, no lo enseñes
+            return
+        } else {
+            anime.initialize(resultSection);
+        }
+    });
+}
+
 function showSection(sectionId) {
 	// Convertimos todas las secciones en hidden
 
@@ -65,5 +85,6 @@ export {
     toggleNav,
     displayBook,
     displayFavoriteMangas,
+    displayFavoriteAnimes,
 	showSection
 }

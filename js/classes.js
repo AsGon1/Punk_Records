@@ -110,11 +110,11 @@ class Character {
 
         this.id = id;
         this.name = name;
-        this.age = age; // Guarda el formato de la serie
-        this.gender = gender; // Estado en el que se encuentra la obra, en emision o no.
-        this.dateOfBirth = dateOfBirth; // Fecha de inicio de la serie (objeto: day, month, year)
+        this.age = age || "N/A"; // Guarda la edad del personage
+        this.gender = gender || "N/A"; // Guarda el genero del personaje
+        this.dateOfBirth = dateOfBirth || "N/A"; // Fecha de nacimiento del personaje
         this.image = image; // Objeto que guarda las cover image (extra large, large y medium)
-        this.description = description;
+        this.description = description || "Description: Without information"; //descripcion del personaje
 
     }
 

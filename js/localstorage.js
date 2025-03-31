@@ -24,7 +24,6 @@ function getMangaFromLocalStorage (toberead) {
 				manga.coverImage,
 				manga.description,
 				manga.genres,
-                manga.characters
 			)
 			result.push(mangaCard);
 		});
@@ -40,18 +39,17 @@ function getAnimeFromLocalStorage (toberead) {
 	const result = [];
 	if(resultJSON !== null) {
 		resultJSON.forEach(anime => { //crear un array de libros con el formato bookhtml
-			const animeCard = new MangaHTML (
-				manga.id,
-				manga.title,
-				manga.format,
-				manga.episodes,
-				manga.duration,
-				manga.status,
-				manga.startDate,
-				manga.coverImage,
-				manga.description,
-				manga.genres,
-                manga.characters
+			const animeCard = new AnimeHTML (
+				anime.id,
+				anime.title,
+				anime.format,
+				anime.episodes,
+				anime.duration,
+				anime.status,
+				anime.startDate,
+				anime.coverImage,
+				anime.description,
+				anime.genres,
 			)
 			result.push(animeCard);
 		});
@@ -85,9 +83,15 @@ function removeFromLocalStorageArray (toberead, item) {
 	saveToLocalStorage(toberead, array);
 }
 
-// Buscar item en lo guardado en el LocalStorage
+// Buscar Manga en lo guardado en el LocalStorage
 function findMangaInLocalStorageArray (toberead, manga) {
 	const array = getMangaFromLocalStorage(toberead) || [];
+	return array.find(element => element.id === manga.id);
+}
+
+// Buscar Manga en lo guardado en el LocalStorage
+function findAnimeInLocalStorageArray (toberead, manga) {
+	const array = getAnimeFromLocalStorage(toberead) || [];
 	return array.find(element => element.id === manga.id);
 }
 
@@ -98,5 +102,6 @@ export {
     getAnimeFromLocalStorage,
 	addToLocalStorageArray,
 	removeFromLocalStorageArray,
-	findInLocalStorageArray,
+	findMangaInLocalStorageArray,
+	findAnimeInLocalStorageArray
 }

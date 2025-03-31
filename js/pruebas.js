@@ -18,8 +18,6 @@ query ($search: String!) {
         format
         status
         startDate {
-            day
-            month
             year
         }
         coverImage {
@@ -66,6 +64,8 @@ query ($search: String!) {
             large
         }
         description
+        episodes
+        duration
     }
   }
 }
@@ -86,7 +86,7 @@ query ($search: String!){
             large
             medium
         }
-        description
+        description(asHtml: true)
         dateOfBirth {
             day
             month
@@ -98,13 +98,56 @@ query ($search: String!){
 
 let query4 = `query Media {
         GenreCollection
-    }`;
+}`;
+
+let query5 = `
+query ($id: Int!) {
+  Page {
+    media(id: $id, isAdult: false) {
+        id
+        title {
+            romaji
+            english
+            native
+        }
+        format
+        status
+        startDate {
+            year
+        }
+        coverImage {
+            large
+        }
+        description
+        genres
+        characters(sort: [ROLE, RELEVANCE, ID]) {
+            nodes {
+                image {
+                    large
+                    medium
+                    }
+                name {
+                    first
+                    last
+                    alternative
+                }
+            }
+        }
+        chapters
+        volumes
+        episodes
+        duration
+    }
+  }
+}`;
 
 // Define our query variables and values that will be used in the query request
 let variables = {
     search: "Naruto"
 };
-
+let variables2 ={
+    id: 15
+};
 // Define the config we'll need for our Api request
 let url = 'https://graphql.anilist.co',
     options = {
@@ -114,16 +157,18 @@ let url = 'https://graphql.anilist.co',
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: query4,
-            //variables: variables
+            query: query5,
+            variables: variables2
         })
     };
 
 // Make the HTTP Api request
+/* let response = await fetch(url, options).then(handleResponse)
+                    .then(handleData)
+                    .catch(handleError); */
 fetch(url, options).then(handleResponse)
-    .then(handleData)
-    .catch(handleError);
-
+                    .then(handleData)
+                    .catch(handleError);
 function handleResponse(response) {
     return response.json().then(function (json) {
         return response.ok ? json : Promise.reject(json);
@@ -132,9 +177,12 @@ function handleResponse(response) {
 
 function handleData(data) {
     console.log(data);
+    //return data;
 }
 
 function handleError(error) {
     alert('Error, check console');
     console.error(error);
 }
+
+//console.log(response.data.Page);
