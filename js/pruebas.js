@@ -1,3 +1,10 @@
+
+const genres = ['Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
+                'Horror', 'Mahou Shoujo', 'Mecha', 'Music', 'Mystery',
+                'Psychological', 'Romance', 'Sci-Fi', 'Slice of Life',
+                'Sports', 'Supernatural', 'Thriller']
+
+
 let query = `
 query ($search: String!) {
   Page {
@@ -89,6 +96,10 @@ query ($search: String!){
 }
 `;
 
+let query4 = `query Media {
+        GenreCollection
+    }`;
+
 // Define our query variables and values that will be used in the query request
 let variables = {
     search: "Naruto"
@@ -103,8 +114,8 @@ let url = 'https://graphql.anilist.co',
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: query,
-            variables: variables
+            query: query4,
+            //variables: variables
         })
     };
 

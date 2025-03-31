@@ -1,5 +1,6 @@
 import { Manga, Anime, Character } from "./classes.js";
-import { addToLocalStorageArray, getMangaFromLocalStorage, getAnimeFromLocalStorage, removeFromLocalStorageArray, findInLocalStorageArray } from "./localstorage.js";
+import { addToLocalStorageArray, getMangaFromLocalStorage, getAnimeFromLocalStorage, 
+         removeFromLocalStorageArray, findMangaInLocalStorageArray } from "./localstorage.js";
 
 
 class MangaHTML extends Manga {
@@ -47,8 +48,8 @@ class MangaHTML extends Manga {
 
     // VISUALIZACION DE ELEMENTOS. Tarjetas de mangas
     render() {
-        const isBookmark = findInLocalStorageArray("favoriteReadMangas", this);
-        const isNotBookmark = findInLocalStorageArray("favoriteNoReadMangas", this);
+        const isBookmark = findMangaInLocalStorageArray("favoriteReadMangas", this);
+        const isNotBookmark = findMangaInLocalStorageArray("favoriteNoReadMangas", this);
         this.article.innerHTML = "";
 
         const image = document.createElement("img");
