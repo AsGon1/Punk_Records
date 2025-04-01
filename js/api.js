@@ -1,5 +1,6 @@
 import { apiKey } from "./apikey.js"; //para saber de qué archivo cogemos la api key
 import { displayManga, displayAnime, displayCharacter } from "./functions.js";
+import { mangaByTitle, animeByTitle, characterByName, queryById } from "./queries.js";
 
 const URL = 'https://graphql.anilist.co';
 
@@ -44,38 +45,52 @@ function handleError(error) {
     console.error(error);
 }
 
-async function getBookBySubject(subject) {
-    const url = `subject:"${subject}"`;
-    const result = await fetchData(url);
-    console.log(result);
-    displayBook(result.items);
+async function getMangaByTitle(title) { //Función para obtener los mangas del titulo que se ha escrito
+    let variables ={
+        search: title
+    };
+    const result = await fetchData(mangaByTitle, variables);
+    displayManga(result.data.Page.media);
 }
 
-async function getBookByTitle(title) {
-    const url = `intitle:"${title}"`;
-    const result = await fetchData(url);
-    console.log(result);
-    displayBook(result.items);
+async function getAnimeByTitle(title) { //Función para obtener los animes del titulo que se ha escrito
+    let variables ={
+        search: title
+    };
+    const result = await fetchData(animeByTitle, variables);
+    displayAnime(result.data.Page.media);
 }
 
-async function getBookByAuthor(author) {
-    const url = `inauthor:"${author}"`;
-    const result = await fetchData(url);
-    console.log(result);
-    displayBook(result.items);
+async function getCharacterByName(name) { //
+    let variables ={
+        search: name
+    };
+    const result = await fetchData(characterByName, variables);
+    displayCharacter(result.data.Page.characters);
 }
 
-async function getBookByPublisher(publisher) {
-    const url = `inpublisher:"${publisher}"`;
-    const result = await fetchData(url);
-    console.log(result);
-    displayBook(result.items);
+async function getRandomItem(){
+
+    let randomId = getRandomInt(1, 260000); // el numero maximo es la suma de la cantidad de Items aproximados que hay en la API
+
+    let variables ={
+        id: randomId
+    };
+
+    const result = await fetchData(queryById, variables);
+
+    return result.data.Page.media[0];
 }
 
+function getRandomInt(min, max){ // Esta funcion nos da un Int entre los valores max y min, ambos incluidos
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 export {
-    getBookByPublisher,
-    getBookByTitle,
-    getBookBySubject,
-    getBookByAuthor
+    getMangaByTitle,
+    getAnimeByTitle,
+    getCharacterByName,
+    getRandomItem
 }

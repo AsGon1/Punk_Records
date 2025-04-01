@@ -181,7 +181,7 @@ class MangaHTML extends Manga {
     }
 }
 
-class AnimeTML extends Anime {
+class AnimeHTML extends Anime {
     constructor(id, title, format = "Anime", episodes, duration, status, startDate, coverImage, description, genres) {
         super(id, title, format, episodes, duration, status, startDate, coverImage, description, genres);
         this.article = null;
@@ -435,8 +435,7 @@ class PunkRecordsHTML {
     initializeHome() {
         this.initializeHomeBrowser(); // buscador en la pagina de home
         this.initializeHomeMangas(); //Sugerencias de Mangas en Home
-        this.initializeHomeAnimes();
-        this.initializeHomeCharacters();
+        this.initializeHomeAnimes(); //Sugerencias de Animes en Home
     }
 
     initializeHomeBrowser(){
@@ -652,4 +651,11 @@ class PunkRecordsHTML {
         displayFavoriteBooks(wishlistLocalStorage);
         
     }
+}
+
+export {
+    MangaHTML,
+    AnimeHTML,
+    CharacterHTML,
+    PunkRecordsHTML
 }

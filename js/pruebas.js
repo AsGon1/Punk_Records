@@ -141,12 +141,37 @@ query ($id: Int!) {
   }
 }`;
 
+let query6 = `
+    query CharacterDetails ($id: Int!){
+      Page{
+        characters(id: $id) {
+            id
+            name {
+                first
+                last
+            }
+            age
+            gender
+            image{
+                large
+                medium
+            }
+            description(asHtml: true)
+            dateOfBirth {
+                day
+                month
+            }
+        }
+      }
+    }
+`;
+
 // Define our query variables and values that will be used in the query request
 let variables = {
     search: "Naruto"
 };
 let variables2 ={
-    id: 15
+    id: 337
 };
 // Define the config we'll need for our Api request
 let url = 'https://graphql.anilist.co',
@@ -157,8 +182,8 @@ let url = 'https://graphql.anilist.co',
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: query5,
-            variables: variables2
+            query: query3,
+            variables: variables
         })
     };
 

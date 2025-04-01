@@ -57,7 +57,7 @@ let animeByTitle = `
 
 
 // Query para obtener los personajes por el nombre
-let queryCharacter = `
+let characterByName = `
     query ($search: String!){
       Page{
         characters(search: $search) {
@@ -82,6 +82,7 @@ let queryCharacter = `
     }
 `;
 
+// Esta query nos permite buscar por ID, pero no se puede especificar el formato por que los IDs no dependen de ello
 let queryById = `
 query ($id: Int!) {
   Page {
@@ -107,3 +108,10 @@ query ($id: Int!) {
     }
   }
 }`;
+
+export{
+    mangaByTitle,
+    animeByTitle,
+    characterByName,
+    queryById
+}
