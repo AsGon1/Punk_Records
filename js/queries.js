@@ -50,6 +50,7 @@ let animeByTitle = `
             description
             episodes
             duration
+            genres
         }
       }
     }

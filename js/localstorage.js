@@ -1,4 +1,5 @@
-import { MangaHTML, AnimeHTML } from "./classesHTML.js";
+import { MangaHTML, AnimeHTML } from "./classesHtml.js";
+
 
 // Guardar objetos en LocalStorage
 function saveToLocalStorage (toberead, manga) {
@@ -59,8 +60,22 @@ function getAnimeFromLocalStorage (toberead) {
 }
 
 // Añadir objetos al array guardado en LocalStorage
-function addToLocalStorageArray (toberead, item) {
-	const array = getFromLocalStorage(toberead) || [];
+function addMangaToLocalStorageArray (toberead, item) {
+
+	const array = getMangaFromLocalStorage(toberead) || [];
+	
+	const index = array.findIndex(element => element.id === item.id);
+	if (index !== -1) {
+		return;
+	}
+	array.push(item);
+	saveToLocalStorage(toberead, array);
+}
+
+function addAnimeToLocalStorageArray (toberead, item) {
+
+	const array = getAnimeFromLocalStorage(toberead) || [];
+	
 	const index = array.findIndex(element => element.id === item.id);
 	if (index !== -1) {
 		return;
@@ -70,8 +85,21 @@ function addToLocalStorageArray (toberead, item) {
 }
 
 // Eliminar objetos del array guardado en LocalStorage
-function removeFromLocalStorageArray (toberead, item) {
-	const array = getFromLocalStorage(toberead);
+function removeMangaFromLocalStorageArray (toberead, item) {
+	const array = getMangaFromLocalStorage(toberead);
+	if (!array) {
+		return;
+	}
+	const index = array.findIndex(element => element.id === item.id);
+	if (index === -1) {
+		return;
+	}
+	array.splice(index, 1);
+	saveToLocalStorage(toberead, array);
+}
+
+function removeAnimeFromLocalStorageArray (toberead, item) {
+	const array = getAnimeFromLocalStorage(toberead);
 	if (!array) {
 		return;
 	}
@@ -90,9 +118,9 @@ function findMangaInLocalStorageArray (toberead, manga) {
 }
 
 // Buscar Manga en lo guardado en el LocalStorage
-function findAnimeInLocalStorageArray (toberead, manga) {
+function findAnimeInLocalStorageArray (toberead, anime) {
 	const array = getAnimeFromLocalStorage(toberead) || [];
-	return array.find(element => element.id === manga.id);
+	return array.find(element => element.id === anime.id);
 }
 
 
@@ -100,8 +128,10 @@ export {
 	saveToLocalStorage,
 	getMangaFromLocalStorage,
     getAnimeFromLocalStorage,
-	addToLocalStorageArray,
-	removeFromLocalStorageArray,
+	addMangaToLocalStorageArray,
+	removeMangaFromLocalStorageArray,
+	addAnimeToLocalStorageArray,
+	removeAnimeFromLocalStorageArray,
 	findMangaInLocalStorageArray,
 	findAnimeInLocalStorageArray
 }

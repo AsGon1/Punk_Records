@@ -1,4 +1,8 @@
 
+import { fetchData } from "./api.js";
+import { queryById } from "./queries.js";
+
+
 const genres = ['Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
                 'Horror', 'Mahou Shoujo', 'Mecha', 'Music', 'Mystery',
                 'Psychological', 'Romance', 'Sci-Fi', 'Slice of Life',
@@ -21,7 +25,9 @@ query ($search: String!) {
             year
         }
         coverImage {
+            extraLarge
             large
+            medium
         }
         description
         genres
@@ -168,10 +174,10 @@ let query6 = `
 
 // Define our query variables and values that will be used in the query request
 let variables = {
-    search: "Naruto"
+    search: "One Piece"
 };
 let variables2 ={
-    id: 337
+    id: 156271
 };
 // Define the config we'll need for our Api request
 let url = 'https://graphql.anilist.co',
@@ -182,7 +188,7 @@ let url = 'https://graphql.anilist.co',
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: query3,
+            query: query,
             variables: variables
         })
     };
@@ -210,4 +216,23 @@ function handleError(error) {
     console.error(error);
 }
 
-//console.log(response.data.Page);
+/* async function getRandomItem(){
+
+    let randomId = getRandomInt(1, 260000); // el numero maximo es la suma de la cantidad de Items aproximados que hay en la API
+
+    let variables ={
+        id: randomId
+    };
+
+    const result = await fetchData(queryById, variables);
+
+    return result.data.Page.media[0];
+}
+
+function getRandomInt(min, max){ // Esta funcion nos da un Int entre los valores max y min, ambos incluidos
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+} */
+
+//console.log(await getRandomItem());

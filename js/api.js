@@ -1,13 +1,12 @@
-import { apiKey } from "./apikey.js"; //para saber de qué archivo cogemos la api key
 import { displayManga, displayAnime, displayCharacter } from "./functions.js";
 import { mangaByTitle, animeByTitle, characterByName, queryById } from "./queries.js";
 
-const URL = 'https://graphql.anilist.co';
+let URL = 'https://graphql.anilist.co';
 
 //para el fetch con GET
 async function fetchData(query,variables) {
     
-    OPTIONS = {
+    let OPTIONS = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -41,7 +40,7 @@ function handleData(data) {
 }
 
 function handleError(error) {
-    alert('Error, check console');
+    //alert('Error, check console');
     console.error(error);
 }
 
@@ -71,7 +70,7 @@ async function getCharacterByName(name) { //
 
 async function getRandomItem(){
 
-    let randomId = getRandomInt(1, 260000); // el numero maximo es la suma de la cantidad de Items aproximados que hay en la API
+    let randomId = getRandomInt(1, 50000); // el numero maximo es la suma de la cantidad de Items aproximados que hay en la API
 
     let variables ={
         id: randomId
@@ -79,7 +78,14 @@ async function getRandomItem(){
 
     const result = await fetchData(queryById, variables);
 
-    return result.data.Page.media[0];
+    const data = result.data.Page.media[0];
+
+    if (result.data.Page.media.length !== 0){
+        return data;
+    }else {
+        const data2 = await getRandomItem();
+        return data2;
+    }
 }
 
 function getRandomInt(min, max){ // Esta funcion nos da un Int entre los valores max y min, ambos incluidos
@@ -92,5 +98,6 @@ export {
     getMangaByTitle,
     getAnimeByTitle,
     getCharacterByName,
-    getRandomItem
+    getRandomItem,
+    fetchData
 }

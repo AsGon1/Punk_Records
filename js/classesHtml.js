@@ -1,7 +1,21 @@
 import { Manga, Anime, Character } from "./classes.js";
-import { addToLocalStorageArray, getMangaFromLocalStorage, getAnimeFromLocalStorage, 
-         removeFromLocalStorageArray, findMangaInLocalStorageArray, findAnimeInLocalStorageArray} from "./localstorage.js";
-         import { displayBook, displayFavoriteMangas, displayFavoriteAnimes } from "./functions.js";
+
+import { addMangaToLocalStorageArray, addAnimeToLocalStorageArray, removeMangaFromLocalStorageArray, removeAnimeFromLocalStorageArray, 
+        getMangaFromLocalStorage, getAnimeFromLocalStorage, 
+        findMangaInLocalStorageArray, findAnimeInLocalStorageArray} from "./localstorage.js";
+
+import { displayManga, displayAnime, displayCharacter, displayFavoriteMangas,
+         displayFavoriteAnimes, displaySuggestions } from "./functions.js";
+
+import { getMangaByTitle, getAnimeByTitle, getCharacterByName } from "./api.js";
+
+
+// GENEROS EXITENTES EN LA API
+const GENRES = ['Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
+                'Horror', 'Mahou Shoujo', 'Mecha', 'Music', 'Mystery',
+                'Psychological', 'Romance', 'Sci-Fi', 'Slice of Life',
+                'Sports', 'Supernatural', 'Thriller']
+
 
 class MangaHTML extends Manga {
     constructor(id, title, format = "Manga", chapters, volumes,status, startDate, coverImage, description, genres) {
@@ -90,7 +104,7 @@ class MangaHTML extends Manga {
         attributesVolumes.textContent = "Volumes: " + this.volumes;
 
         attributesDescription.classList.add("attribute", "description");
-        attributesDescription.textContent = "Description: " + this.description;
+        attributesDescription.innerHTML = this.description;
 
 
         if (isBookmark || isNotBookmark) {
@@ -106,26 +120,24 @@ class MangaHTML extends Manga {
         favButton.addEventListener("click", () => {
             if (isBookmark) {
                 this.removeFav();
-                removeFromLocalStorageArray("favoriteReadMangas", this);
+                removeMangaFromLocalStorageArray("favoriteReadMangas", this);
             } else {
                 this.saveFav();
-                addToLocalStorageArray("favoriteNoReadMangas", this);
-            }
+                addMangaToLocalStorageArray("favoriteNoReadMangas", this);
+            };
 
             if (isNotBookmark){
                 this.removeFav();
-                removeFromLocalStorageArray("favoriteNoReadMangas", this);
-            }else{
-                this.saveFav();
-                addToLocalStorageArray("favoriteNoReadMangas", this);
-            }
+                removeMangaFromLocalStorageArray("favoriteNoReadMangas", this);
+            };
+
             const favReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];
             const favNoReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteNoReadMangas") || [];
             displayFavoriteMangas(favReadMangaListLocalStorage, favNoReadMangaListLocalStorage);
             this.render();
         })
 
-        if (isBookmark) {
+        if (isBookmark || this.read) {
             readButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5m8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
 </svg>`;
@@ -138,11 +150,19 @@ class MangaHTML extends Manga {
         readButton.addEventListener("click", () => {
             if (isBookmark) {
                 this.removeRead();
-                removeFromLocalStorageArray("favoriteReadMangas", this);
-                addToLocalStorageArray("favoriteNoReadMangas", this);
-            } else {
+                removeMangaFromLocalStorageArray("favoriteReadMangas", this);
+                addMangaToLocalStorageArray("favoriteNoReadMangas", this);
+            }
+
+            if (isNotBookmark){
+                this.removeRead();
+                removeMangaFromLocalStorageArray("favoriteNoReadMangas", this);
+                addMangaToLocalStorageArray("favoriteReadMangas", this);
+            }
+
+            if (!isBookmark && !isNotBookmark){
                 this.saveRead();
-                addToLocalStorageArray("favoriteReadMangas", this);
+                addMangaToLocalStorageArray("favoriteReadMangas", this);
             }
             const favReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];
             const favNoReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteNoReadMangas") || [];
@@ -170,11 +190,11 @@ class MangaHTML extends Manga {
     createGenres(attributesGenres) {
         for (let i = 0; i < this.genres.length; i++) {
             const genre = document.createElement("li");
-            category.classList.add("attribute", "genre");
+            genre.classList.add("attribute", "category");
             if (i === 0) {
-                category.textContent = "Genres: " + this.categories[i];
+                genre.textContent = "Genres: " + this.genres[i];
             } else {
-            category.textContent += this.categories[i];
+                genre.textContent += this.genres[i];
             }
             attributesGenres.append(genre);
         }
@@ -213,21 +233,21 @@ class AnimeHTML extends Anime {
         this.article.classList.remove("bookmark");
     }
 
-    saveRead() {
-        super.saveFav();
+    saveViewed() {
+        super.saveViewed();
         this.article.classList.add("viewedmark");
     }
 
     // FUNCION BORRAR FAVORITOS
-    removeRead() {
-        super.removeFav();
+    removeViewed() {
+        super.removeViewed();
         this.article.classList.remove("viewedmark");
     }
 
     // VISUALIZACION DE ELEMENTOS. Tarjetas de animes
     render() {
-        const isBookmark = findAnimeInLocalStorageArray("favoriteViewedAnime", this);
-        const isNotBookmark = findAnimeInLocalStorageArray("favoriteNoViewedAnime", this);
+        const isBookmark = findAnimeInLocalStorageArray("favoriteViewedAnimes", this);
+        const isNotBookmark = findAnimeInLocalStorageArray("favoriteNoViewedAnimes", this);
         this.article.innerHTML = "";
 
         const image = document.createElement("img");
@@ -257,7 +277,7 @@ class AnimeHTML extends Anime {
         attributeList.classList.add("anime__attributes");
 
         attributesStartDate.classList.add("attribute", "date");
-        attributesStartDate.textContent = "Realese Date: " + this.startDate;
+        attributesStartDate.textContent = "Realese Date: " + this.startDate.year;
 
         attributesEpisodes.classList.add("attribute", "chapters");
         attributesEpisodes.textContent = "Episodes: " + this.episodes;
@@ -266,7 +286,7 @@ class AnimeHTML extends Anime {
         attributesDuration.textContent = "Duration: " + this.duration;
 
         attributesDescription.classList.add("attribute", "description");
-        attributesDescription.textContent = "Description: " + this.description;
+        attributesDescription.innerHTML = this.description;
 
 
         if (isBookmark || isNotBookmark) {
@@ -282,21 +302,19 @@ class AnimeHTML extends Anime {
         favButton.addEventListener("click", () => {
             if (isBookmark) {
                 this.removeFav();
-                removeFromLocalStorageArray("favoriteViewedAnimes", this);
+                removeAnimeFromLocalStorageArray("favoriteViewedAnimes", this);
             } else {
                 this.saveFav();
-                addToLocalStorageArray("favoriteNoViewedAnimes", this);
+                addAnimeToLocalStorageArray("favoriteNoViewedAnimes", this);
             }
 
             if (isNotBookmark){
                 this.removeFav();
-                removeFromLocalStorageArray("favoriteNoViewedAnimes", this);
-            }else{
-                this.saveFav();
-                addToLocalStorageArray("favoriteNoViewedAnimes", this);
+                removeAnimeFromLocalStorageArray("favoriteNoViewedAnimes", this);
             }
-            const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteReadMangas") || [];
-            const favNoviewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoReadMangas") || [];
+
+            const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteViewedAnimes") || [];
+            const favNoviewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoViewedAnimes") || [];
             displayFavoriteAnimes(favViewedAnimeListLocalStorage, favNoviewedAnimeListLocalStorage);
             this.render();
         })
@@ -306,7 +324,7 @@ class AnimeHTML extends Anime {
   <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
   <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
 </svg>`;
-        } else if (isNotBookmark || !this.read){
+        } else if (isNotBookmark || !this.watched){
             viewedButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">
   <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"/>
   <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"/>
@@ -314,17 +332,27 @@ class AnimeHTML extends Anime {
 </svg>`;
         }
 
-        readButton.addEventListener("click", () => {
+        viewedButton.addEventListener("click", () => {
+            
             if (isBookmark) {
-                this.removeRead();
-                removeFromLocalStorageArray("favoriteViewedAnimes", this);
-                addToLocalStorageArray("favoriteNoViewedAnimes", this);
-            } else {
-                this.saveRead();
-                addToLocalStorageArray("favoriteViewedAnimes", this);
+                this.removeViewed();
+                removeAnimeFromLocalStorageArray("favoriteViewedAnimes", this);
+                addAnimeToLocalStorageArray("favoriteNoViewedAnimes", this);
+            };
+
+            if (isNotBookmark){
+                this.removeViewed();
+                removeAnimeFromLocalStorageArray("favoriteNoViewedAnimes", this);
+                addAnimeToLocalStorageArray("favoriteViewedAnimes", this);
+            };
+
+            if (!isBookmark && !isNotBookmark){
+                this.saveViewed();
+                addAnimeToLocalStorageArray("favoriteViewedAnimes", this);
             }
-            const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteReadMangas") || [];
-            const favNoViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoReadMangas") || [];
+
+            const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteViewedAnimes") || [];
+            const favNoViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoViewedAnimes") || [];
             displayFavoriteAnimes(favViewedAnimeListLocalStorage, favNoViewedAnimeListLocalStorage);
             this.render();
         })
@@ -342,160 +370,60 @@ class AnimeHTML extends Anime {
 
         this.article.appendChild(favButton);
         
-        this.article.appendChild(readButton);
+        this.article.appendChild(viewedButton);
     }
 
     // AÑADIDO DE TODAS LOS GENEROS A LA LISTA EN FUNCION DE LA CANTIDAD
     createGenres(attributesGenres) {
         for (let i = 0; i < this.genres.length; i++) {
             const genre = document.createElement("li");
-            category.classList.add("attribute", "genre");
+            genre.classList.add("attribute", "category");
             if (i === 0) {
-                category.textContent = "Genres: " + this.categories[i];
+                genre.textContent = "Genres: " + this.genres[i];
             } else {
-            category.textContent += this.categories[i];
+                genre.textContent += this.genres[i];
             }
             attributesGenres.append(genre);
         }
     }
 }
 
-class CharacterHTML extends Character {
-    
-    constructor(id, name, age, gender, description, dateOfBirth, image) {
-        super(id, name, age, gender, description, dateOfBirth, image);
-        this.article = null;
-    }
-
-    // CREACION DE ARTICLES QUE REPRESENTA A CADA TARJETA DE LIBRO
-    createHTML(fatherElement) {
-        this.article = document.createElement("article");
-        this.article.classList.add("character", "card");
-
-        fatherElement.appendChild(this.article);
-    }
-
-    // INICIALIZA CADA ELEMENTO PARA SU VISUALIZACION
-    initialize(fatherElement) {
-        this.createHTML(fatherElement);
-        this.render();
-    }
-
-    // VISUALIZACION DE ELEMENTOS. Tarjetas de personajes
-    render() {
-
-        this.article.innerHTML = "";
-
-        const image = document.createElement("img");
-        const attributesName = document.createElement("h3");
-
-        const attributeList = document.createElement("ul");
-        const attributesAge = document.createElement("li");
-        const attributesGender = document.createElement("li");
-        const attributesBirthday = document.createElement("li");
-        const attributesDescription = document.createElement("li");
-
-        image.setAttribute("src", this.coverImage.large);
-        attributesName.textContent = this.name.first + " " + this.name.last;
-
-        attributeList.classList.add("character__attributes");
-
-        attributesAge.classList.add("attribute", "age");
-        attributesAge.textContent = "Age: " + this.age;
-
-        attributesBirthday.classList.add("attribute", "birthday");
-        attributesBirthday.textContent = "Birthday (dd/mm): " + this.dateOfBirth.day + "/" + this.dateOfBirth.month;
-
-        attributesGender.classList.add("attribute", "gender");
-        attributesGender.textContent = "Gender: " + this.gender;
-
-        attributesDescription.classList.add("attribute", "description");
-        attributesDescription.innerHTML = this.description;
-
-        attributeList.append(attributesAge, attributesBirthday, attributesGender, attributesDescription);
-
-        this.article.appendChild(image);
-        this.article.appendChild(attributesName);
-        this.article.appendChild(attributeList);
-
-    }
-}
-
 class PunkRecordsHTML {
+
     constructor() {
         this.initialize();
     }
 
     initialize() { //lo que se ve, sin ningún cambio
         this.initializeHome();
-        this.initializeArchive();
+        this.initializeBrowser();
         this.initializeFavorites();
     }
 
     initializeHome() {
         this.initializeHomeBrowser(); // buscador en la pagina de home
-        this.initializeHomeMangas(); //Sugerencias de Mangas en Home
-        this.initializeHomeAnimes(); //Sugerencias de Animes en Home
+        this.initializeHomeSuggestions(); //Sugerencias de Home
     }
 
     initializeHomeBrowser(){
 
-        const home = document.getElementById("home"); //sección home página principal
+        const browser = document.getElementById("home__browser"); //sección browser página principal
 
         // creación del BUSCADOR
-        const browserDiv = document.createElement('div');
         const browserInput = document.createElement('input');
         const browserButton = document.createElement('button');
-        
-        const browserSelect = document.createElement('select'); // Select para la elección de busqueda
-        
-        const browserSelectDefaultOption = document.createElement('option');
-        browserSelectDefaultOption.value = 0;
-        browserSelectDefaultOption.text = "Selecciona tipo...";
-
-        const browserSelectOptionManga = document.createElement('option');
-        browserSelectDefaultOption.value = 1;
-        browserSelectDefaultOption.text = "Manga";
-
-        const browserSelectOptionAnime = document.createElement('option');
-        browserSelectDefaultOption.value = 2;
-        browserSelectDefaultOption.text = "Anime";
-
-        const browserSelectOptionCharacter = document.createElement('option');
-        browserSelectDefaultOption.value = 3;
-        browserSelectDefaultOption.text = "Character";
-
-        browserSelect.add(browserSelectDefaultOption);
-        browserSelect.add(browserSelectOptionManga);
-        browserSelect.add(browserSelectOptionAnime);
-        browserSelect.add(browserSelectOptionCharacter);
 
         browserInput.setAttribute("type", "text"); //añadir al input el type
-        browserInput.setAttribute("placeholder", "Buscar por Título..."); //añadir al input el placeholder
+        browserInput.setAttribute("placeholder", "Search Manga..."); //añadir al input el placeholder
 
         browserButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
 </svg>`;//añadir el Buscar
 
-        browserDiv.setAttribute("id", "home__browser");
-        browserDiv.append(browserInput, browserButton, browserSelect); //meter el input y botón en el div
-        home.append(browserDiv); //meter el div en la section browser
-
-        let selectedValue = 0;
-        browserSelect.addEventListener("Change", (event) => {
-            selectedValue = event.target.value;
-        });
+        browser.append(browserInput, browserButton);
 
         browserButton.addEventListener("click", async (e) => {
-
-            if (selectedValue === 1){
-                await getMangaByTitle(browserInput.value);
-            }else if (selectedValue === 2){
-                await getAnimeByTitle(browserInput.value);
-            }else if (selectedValue === 3){
-                await getCharacter(browserInput.value);
-            }
-            
+            await getMangaByTitle(browserInput.value);
 			document.getElementById('browser').classList.remove('hidden');
 			document.getElementById('home__browser').classList.add('hidden');
         });
@@ -503,152 +431,144 @@ class PunkRecordsHTML {
         browserInput.addEventListener("keydown", function (event){
             let code = event.key;
             if (code === 'Enter'){
-                if (selectedValue === 1){
-                    getMangaByTitle(browserInput.value);
-                }else if (selectedValue === 2){
-                    getAnimeByTitle(browserInput.value);
-                }else if (selectedValue === 3){
-                    getCharacter(browserInput.value);
-                }
+                getMangaByTitle(browserInput.value);
 				document.getElementById('browser').classList.remove('hidden');
 				document.getElementById('home__browser').classList.add('hidden');
             }
         });
-
     }
 
+    initializeHomeSuggestions(){
+        displaySuggestions();
+    }
 
     initializeBrowser(){
+
         const browser = document.getElementById('browser');
         const tituloBrowser = document.createElement('h1');
+        
         //boton
         const browserDivInput = document.createElement('div');
         const browserInput = document.createElement('input');
         const browserDivButton = document.createElement('div');
         const browserButton = document.createElement('button');
-        //filters
+        
         const sectionFilters = document.createElement('section');
 
-        const titleDiv = document.createElement('div');
-        const checkboxTitle = document.createElement('input');
-        const textCheckboxTitle = document.createElement('label');
+        const mangaDiv = document.createElement('div');
+        const checkboxManga = document.createElement('input');
+        const textCheckboxManga = document.createElement('label');
 
-        const authorDiv = document.createElement('div');
-        const checkboxAuthor = document.createElement('input');
-        const textCheckboxAuthor = document.createElement('label');
+        const animeDiv = document.createElement('div');
+        const checkboxAnime = document.createElement('input');
+        const textCheckboxAnime = document.createElement('label');
 
-        const publisherDiv = document.createElement('div');
-        const checkboxPublisher = document.createElement('input');
-        const textCheckboxPublisher = document.createElement('label');
-
-        const genreDiv = document.createElement('div');
-        const checkboxRadioGenre = document.createElement('input');
-        const textCheckboxGenre = document.createElement('label');
-
-        const browserImg = document.createElement('img');
-        browserImg.setAttribute("src", "./assets/browser-img.jpg");
-        browserImg.setAttribute("id", "browser-img")
-
-        //disclaimer
-        const disclaimer = document.createElement('p');
         //section resultados
         const resultSection = document.createElement('section');
         
         //ATRIBUTOS
-        tituloBrowser.textContent = "BÚSQUEDA AVANZADA";
+        tituloBrowser.textContent = "SEARCH FOR...";
         //boton
         browserInput.setAttribute("type", "text"); //añadir al input el type
-        browserInput.setAttribute("placeholder", "Encuentra tu siguiente lectura"); //añadir al input el placeholder
+        browserInput.setAttribute("placeholder", "Search..."); //añadir al input el placeholder
+
         browserButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-</svg>`;//añadir el Buscar
+</svg>`;
+        //añadir el Buscar
         browserDivInput.setAttribute("id", "browser__advanceBrowser-input");
         browserDivButton.setAttribute("id", "browser__advanceBrowser-button")
-        //filters
+        
         sectionFilters.setAttribute("id", "browser__filters");
-        textCheckboxTitle.textContent = "Título";
-        textCheckboxTitle.setAttribute("for", "title");
-        checkboxTitle.setAttribute("type", "radio");
-        checkboxTitle.setAttribute("name", "filter");
-        checkboxTitle.setAttribute("value", "title");
-        checkboxTitle.setAttribute("checked", ""); //para que aparezca marcado por defecto
-        textCheckboxAuthor.textContent = "Autorx";
-        textCheckboxAuthor.setAttribute("for", "author");
-        checkboxAuthor.setAttribute("type", "radio");
-        checkboxAuthor.setAttribute("name", "filter");
-        checkboxAuthor.setAttribute("value", "author");
-        textCheckboxPublisher.textContent = "Editorial";
-        textCheckboxPublisher.setAttribute("for", "publisher");
-        checkboxPublisher.setAttribute("type", "radio");
-        checkboxPublisher.setAttribute("name", "filter");
-        checkboxPublisher.setAttribute("value", "publisher");
-        textCheckboxGenre.textContent = "Género literario*";
-        textCheckboxGenre.setAttribute("for", "genre");
-        checkboxRadioGenre.setAttribute("type", "radio");
-        checkboxRadioGenre.setAttribute("name", "filter");
-        checkboxRadioGenre.setAttribute("value", "genre");
-        //disclaimer
-        disclaimer.setAttribute("id", "browser__disclaimer");
-        disclaimer.textContent = "*Para buscar por género literario, por favor introdúcelo sin tildes"
+        textCheckboxManga.textContent = "Manga";
+        textCheckboxManga.setAttribute("for", "manga");
+        checkboxManga.setAttribute("type", "radio");
+        checkboxManga.setAttribute("name", "filter");
+        checkboxManga.setAttribute("value", "manga");
+        checkboxManga.setAttribute("checked", ""); //para que aparezca marcado por defecto
+        
+        textCheckboxAnime.textContent = "Anime";
+        textCheckboxAnime.setAttribute("for", "anime");
+        checkboxAnime.setAttribute("type", "radio");
+        checkboxAnime.setAttribute("name", "filter");
+        checkboxAnime.setAttribute("value", "anime");
+
         //section results
         resultSection.setAttribute("id", "browser__results");
 
         //APPEND
         browserDivInput.append(browserInput, browserButton); //meter el input en el div
-        titleDiv.append(checkboxTitle, textCheckboxTitle);
-        authorDiv.append(checkboxAuthor, textCheckboxAuthor);
-        genreDiv.append(checkboxRadioGenre, textCheckboxGenre);
-        publisherDiv.append(checkboxPublisher, textCheckboxPublisher);
-        sectionFilters.append(titleDiv, authorDiv, genreDiv, publisherDiv);
-        browser.append(browserImg, tituloBrowser, browserDivInput, sectionFilters, disclaimer, resultSection); //meter el div en la section browser
+        mangaDiv.append(checkboxManga, textCheckboxManga);
+        animeDiv.append(checkboxAnime, textCheckboxAnime);
+        sectionFilters.append(mangaDiv, animeDiv);
+        browser.append(tituloBrowser, browserDivInput, sectionFilters, resultSection); //meter el div en la section browser
 
-        //BOTONES CHECKBOX FUNCIONAL
 
-        browserButton.addEventListener("click", function () {
+        browserButton.addEventListener("click", async (e) => {
             const selectedOption = document.querySelector('input[name="filter"]:checked').value;
-            if (selectedOption === "title") {
-                getBookByTitle(browserInput.value);
-            } else if (selectedOption === "publisher") {
-                getBookByPublisher(browserInput.value);
-            } else if (selectedOption === "author") {
-                getBookByAuthor(browserInput.value);
-            } else if (selectedOption === "genre") {
-                getBookBySubject(browserInput.value);
+            if (selectedOption === "manga"){
+                await getMangaByTitle(browserInput.value);
+            }else if (selectedOption === "anime"){
+                await getAnimeByTitle(browserInput.value);
             }
-        })
+
+        });
 
         browserInput.addEventListener("keydown", function (event){
+            
             let code = event.key;
+
             const selectedOption = document.querySelector('input[name="filter"]:checked').value;
+
             if (code === 'Enter'){
-                if (selectedOption === "title") {
-                    getBookByTitle(browserInput.value);
-                } else if (selectedOption === "publisher") {
-                    getBookByPublisher(browserInput.value);
-                } else if (selectedOption === "author") {
-                    getBookByAuthor(browserInput.value);
-                } else if (selectedOption === "genre") {
-                    getBookBySubject(browserInput.value);
+                if (selectedOption === "manga"){
+                    getMangaByTitle(browserInput.value);
+                }else if (selectedOption === "anime"){
+                    getAnimeByTitle(browserInput.value);
                 }
             }
+
         });
         
     }
 
-    initializeWishlist(){
-        const wishlistImg = document.createElement("img");
-        wishlistImg.setAttribute("src", "./assets/wishlist-img.jpg");
-        wishlistImg.setAttribute("id", "wishlist-img");
+    initializeFavorites(){
 
-        const wishlistSection = document.getElementById("wishlist");
-        const tituloWishlist = document.createElement('h1');
-        tituloWishlist.textContent = "WISHLIST";
-        wishlistSection.innerHTML = "";
-        const wishlistLocalStorage = getFromLocalStorage("favorites") || []; //si hay wishlist la carga, si no, array vacío
-        const wishlistLocalStorageDiv = document.createElement("div");
-        wishlistLocalStorageDiv.setAttribute("id", "wishlist__books");
-        wishlistSection.append(wishlistImg, tituloWishlist, wishlistLocalStorageDiv);
-        displayFavoriteBooks(wishlistLocalStorage);
+        const favSection = document.getElementById("favorites");
+        const tituloFavSection = document.createElement('h1');
+        tituloFavSection.textContent = "YOUR FAVORITES";
+        favSection.innerHTML = "";
+
+        const favoriteLocalStorageReadMangas = getMangaFromLocalStorage("favoriteReadMangas") || []; //si hay wishlist la carga, si no, array vacío
+        const favoriteLocalStorageReadMangasDiv = document.createElement("div");
+        const tituloReadSection = document.createElement('h3');
+        tituloReadSection.textContent = "READ";
+        favoriteLocalStorageReadMangasDiv.setAttribute("id", "favorites__manga-read");
+
+        const favoriteLocalStorageNoReadMangas = getMangaFromLocalStorage("favoriteNoReadMangas") || []; //si hay wishlist la carga, si no, array vacío
+        const favoriteLocalStorageNoReadMangasDiv = document.createElement("div");
+        const tituloNoReadSection = document.createElement('h3');
+        tituloNoReadSection.textContent = "NOT READ";
+        favoriteLocalStorageNoReadMangasDiv.setAttribute("id", "favorites__manga-not-read");
+
+        const favoriteLocalStorageViewedAnimes = getAnimeFromLocalStorage("favoriteViewedAnimes") || []; //si hay wishlist la carga, si no, array vacío
+        const favoriteLocalStorageViewedAnimesDiv = document.createElement("div");
+        const tituloViewedSection = document.createElement('h3');
+        tituloViewedSection.textContent = "VIEWED";
+        favoriteLocalStorageViewedAnimesDiv.setAttribute("id", "favorites__anime-viewed");
+
+        const favoriteLocalStorageNoViewdAnimes = getAnimeFromLocalStorage("favoriteNoViewedAnimes") || []; //si hay wishlist la carga, si no, array vacío
+        const favoriteLocalStorageNoViewdAnimesDiv = document.createElement("div");
+        const tituloNoViewedSection = document.createElement('h3');
+        tituloNoViewedSection.textContent = "NOT VIEWED";
+        favoriteLocalStorageNoViewdAnimesDiv.setAttribute("id", "favorites__anime-not-viewed");
+
+        favSection.append(tituloFavSection, tituloReadSection, favoriteLocalStorageReadMangasDiv, 
+            tituloNoReadSection, favoriteLocalStorageNoReadMangasDiv, tituloViewedSection, favoriteLocalStorageViewedAnimesDiv,
+            tituloNoViewedSection, favoriteLocalStorageNoViewdAnimesDiv);
+        
+        displayFavoriteMangas(favoriteLocalStorageReadMangas, favoriteLocalStorageNoReadMangas);
+        displayFavoriteAnimes(favoriteLocalStorageViewedAnimes, favoriteLocalStorageNoViewdAnimes);
         
     }
 }
@@ -656,6 +576,5 @@ class PunkRecordsHTML {
 export {
     MangaHTML,
     AnimeHTML,
-    CharacterHTML,
     PunkRecordsHTML
 }

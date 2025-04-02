@@ -1,6 +1,9 @@
-import { MangaHTML, AnimeHTML, CharacterHTML } from "./classesHTML.js";
-import { mangaByTitle, animeByTitle, queryCharacterByName, queryCharacterById, queryById } from "./queries.js";
+import { MangaHTML, AnimeHTML} from "./classesHtml.js";
+import { mangaByTitle, animeByTitle, characterByName, queryById } from "./queries.js";
 import { getRandomItem } from "./api.js";
+
+const MANGAFORMATS = ["MANGA", "NOVEL", "ONE_SHOT"];
+const ANIMEFORMATS = ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC"];
 
 function toggleNav() { //para hamburguesa
     let nav = document.querySelector(".menu__burger-links");
@@ -16,19 +19,21 @@ function displayManga(mangas) {
             manga.id,
             manga.title,
             manga.format,
+            manga.chapters,
+            manga.volumes,
             manga.status,
             manga.startDate,
             manga.coverImage,
             manga.description,
-            manga.genres,
-            manga.chapters,
-            manga.volumes
+            manga.genres
         );
         if (!mangaCard.coverImage) { //si no hay foto, no lo enseñes
             return
         } else {
+            console.log(mangaCard);
             mangaCard.initialize(resultSection);
         }
+        
     });
 }
 
@@ -40,13 +45,13 @@ function displayAnime(animes) {
             anime.id,
             anime.title,
             anime.format,
+            anime.episodes,
+            anime.duration,
             anime.status,
             anime.startDate,
             anime.coverImage,
             anime.description,
-            anime.genres,
-            anime.chapters,
-            anime.volumes
+            anime.genres
         );
         if (!animeCard.coverImage) { //si no hay foto, no lo enseñes
             return
@@ -65,11 +70,11 @@ function displayCharacter(characters) {
             character.name,
             character.age,
             character.gender,
-            character.dateOfBirth,
-            character.coverImage,
             character.description,
+            character.dateOfBirth,
+            character.image
         );
-        if (!characterCard.coverImage) { //si no hay foto, no lo enseñes
+        if (!characterCard.image) { //si no hay foto, no lo enseñes
             return
         } else {
             characterCard.initialize(resultSection);
@@ -125,7 +130,7 @@ function displayFavoriteAnimes(viewedAnimes, noViewedAnimes) {
     });
 }
 
-function displaySuggestions(){
+async function displaySuggestions(){
 
     const resultSectionSuggestions = document.getElementById("home__suggestions");
 
@@ -133,40 +138,44 @@ function displaySuggestions(){
 
     let suggestions = [];
 
-    for (i = 0; i < 10; i++){
-        let item = getRandomItem(queryById);
-        if (item.chapters !== null){
+    for (let i = 0; i < 5; i++){
+        let item = await getRandomItem(queryById);
+
+        if (MANGAFORMATS.includes(item.format)){ // Se comprueba si el objeto que se ha solicitado tiene el formato adecuado
             const mangaCard = new MangaHTML(
                 item.id,
                 item.title,
                 item.format,
+                item.chapters,
+                item.volumes,
                 item.status,
                 item.startDate,
                 item.coverImage,
                 item.description,
-                item.genres,
-                item.chapters,
-                item.volumes
+                item.genres
             );
             suggestions.push(mangaCard);
         }
 
-        if (item.episodes !== null){
-            const animeCard = new MangaHTML(
+        if (ANIMEFORMATS.includes(item.format)){ // Se comprueba si el objeto que se ha solicitado tiene el formato adecuado
+            const animeCard = new AnimeHTML(
                 item.id,
                 item.title,
                 item.format,
+                item.episodes,
+                item.duration,
                 item.status,
                 item.startDate,
                 item.coverImage,
                 item.description,
-                item.genres,
-                item.episodes,
-                item.duration
+                item.genres
             );
             suggestions.push(animeCard);
+            
         }
     }
+
+    console.log(suggestions);
 
     suggestions.forEach(card => {
         if (!card.coverImage.large) {
