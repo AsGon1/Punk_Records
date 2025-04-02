@@ -195,6 +195,17 @@ function showSection(sectionId) {
 	document.getElementById(sectionId).classList.remove('hidden')
 }
 
+function showHomeSection(homeId, section1, section2) {
+	// Convertimos todas las secciones en hidden
+
+	document.querySelectorAll('.content').forEach(section => {
+		section.classList.add('hidden');
+	})
+	document.getElementById(homeId).classList.remove('hidden');
+    document.getElementById(section1).classList.remove('hidden');
+    document.getElementById(section2).classList.remove('hidden');
+}
+
 export {
     toggleNav,
     displayManga,
@@ -203,5 +214,6 @@ export {
     displayFavoriteMangas,
     displayFavoriteAnimes,
     displaySuggestions,
-	showSection
+	showSection,
+    showHomeSection
 }

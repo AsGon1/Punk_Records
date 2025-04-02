@@ -84,7 +84,9 @@ class MangaHTML extends Manga {
         const attributesGenres = document.createElement("ul");
 
         const favButton = document.createElement("button");
+        favButton.classList.add("favButton");
         const readButton = document.createElement("button");
+        readButton.classList.add("readButton");
 
         image.setAttribute("src", this.coverImage.large);
         attributesTitleEnglish.textContent = "English: " + (this.title.english || "");
@@ -266,7 +268,9 @@ class AnimeHTML extends Anime {
         const attributesGenres = document.createElement("ul");
 
         const favButton = document.createElement("button");
+        favButton.classList.add("favButton");
         const viewedButton = document.createElement("button");
+        viewedButton.classList.add("viewdButton");
 
         image.setAttribute("src", this.coverImage.large);
         attributesTitleEnglish.textContent = "English: " + (this.title.english || "");

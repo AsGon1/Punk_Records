@@ -1,10 +1,10 @@
 import { PunkRecordsHTML } from "./classesHtml.js";
-import { showSection, toggleNav, displayFavoriteAnimes, displayFavoriteMangas, displaySuggestions } from "./functions.js";
+import { showSection, toggleNav, displayFavoriteAnimes, displayFavoriteMangas, displaySuggestions, showHomeSection } from "./functions.js";
 import { getMangaFromLocalStorage, getAnimeFromLocalStorage} from "./localstorage.js";
 
 const home_burgerMenu = document.getElementById("home_menu");
 home_burgerMenu.addEventListener("click", (e) => {
-	showSection('home');
+    showHomeSection('home', 'home__browser', 'home__suggestions');
     displaySuggestions();
 });
 
