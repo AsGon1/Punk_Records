@@ -430,7 +430,7 @@ class PunkRecordsHTML {
         browserButton.addEventListener("click", async (e) => {
             await getMangaByTitle(browserInput.value);
 			document.getElementById('browser').classList.remove('hidden');
-			document.getElementById('home__browser').classList.add('hidden');
+			document.getElementById('home').classList.add('hidden');
         });
 
         browserInput.addEventListener("keydown", function (event){
@@ -438,7 +438,7 @@ class PunkRecordsHTML {
             if (code === 'Enter'){
                 getMangaByTitle(browserInput.value);
 				document.getElementById('browser').classList.remove('hidden');
-				document.getElementById('home__browser').classList.add('hidden');
+				document.getElementById('home').classList.add('hidden');
             }
         });
     }
