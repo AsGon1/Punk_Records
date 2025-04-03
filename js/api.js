@@ -70,7 +70,7 @@ async function getCharacterByName(name) { //
 
 async function getRandomItem(){
 
-    let randomId = getRandomInt(1, 50000); // el numero maximo es la suma de la cantidad de Items aproximados que hay en la API
+    let randomId = getRandomInt(1, 135000); // el numero maximo es la suma de la cantidad de Items aproximados que hay en la API
 
     let variables ={
         id: randomId

@@ -8,7 +8,7 @@ class Manga {
         this.status = status || "UNKNOWN"; // Estado en el que se encuentra la obra, en publicación o no.
         this.startDate = startDate || "UNKNOWN"; // Fecha de inicio de la obra (objeto: day, month, year)
         this.coverImage = coverImage; // Objeto que guarda las cover image (extra large, large y medium)
-        this.description = description || "UNKNOWN";
+        this.description = description || "Description: UNKNOWN";
         this.genres = genres || "UNKNOWN"; // array que guarda los generos de la obra
         this.chapters = chapters || "UNKNOWN"; // numero de capitulos de la obra
         this.volumes = volumes || status; // numero de volumenes si esta acabada o su estado en caso contrario
@@ -63,7 +63,7 @@ class Anime {
         this.coverImage = coverImage || "UNKNOWN"; // Objeto que guarda las cover image (extra large, large y medium)
         this.description = description || "UNKNOWN";
         this.genres = genres || "UNKNOWN"; // array que guarda los generos de la serie
-        this.episodes = episodes || status; // numero de capitulos de la obra
+        this.episodes = episodes || "UNKNOWN"; // numero de capitulos de la obra
         this.duration = duration || "UNKNOWN"; // duracion media de los capitulos
 
         this.fav = false; // Nos indica si la serie esta en favoritos o no

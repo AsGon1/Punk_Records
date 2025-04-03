@@ -138,7 +138,7 @@ async function displaySuggestions(){
 
     let suggestions = [];
 
-    for (let i = 0; i < 5; i++){
+    for (let i = 0; i < 8; i++){
         let item = await getRandomItem(queryById);
 
         if (MANGAFORMATS.includes(item.format)){ // Se comprueba si el objeto que se ha solicitado tiene el formato adecuado
@@ -195,6 +195,17 @@ function showSection(sectionId) {
 	document.getElementById(sectionId).classList.remove('hidden')
 }
 
+function showHomeSection(homeId, section1, section2) {
+	// Convertimos todas las secciones en hidden
+
+	document.querySelectorAll('.content').forEach(section => {
+		section.classList.add('hidden');
+	})
+	document.getElementById(homeId).classList.remove('hidden');
+    document.getElementById(section1).classList.remove('hidden');
+    document.getElementById(section2).classList.remove('hidden');
+}
+
 export {
     toggleNav,
     displayManga,
@@ -203,5 +214,6 @@ export {
     displayFavoriteMangas,
     displayFavoriteAnimes,
     displaySuggestions,
-	showSection
+	showSection,
+    showHomeSection
 }

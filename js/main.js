@@ -1,22 +1,24 @@
 import { PunkRecordsHTML } from "./classesHtml.js";
-import { showSection, toggleNav, displayFavoriteAnimes, displayFavoriteMangas, displaySuggestions } from "./functions.js";
+import { showSection, toggleNav, displayFavoriteAnimes, displayFavoriteMangas, displaySuggestions, showHomeSection } from "./functions.js";
 import { getMangaFromLocalStorage, getAnimeFromLocalStorage} from "./localstorage.js";
 
 const home_burgerMenu = document.getElementById("home_menu");
 home_burgerMenu.addEventListener("click", (e) => {
-	showSection('home');
+    showHomeSection('home', 'home__browser', 'home__suggestions');
     displaySuggestions();
 });
 
 const browser_burgerMenu = document.getElementById("browser_menu");
 browser_burgerMenu.addEventListener("click", (e) => {
-	showSection('browser')});
+	showSection('browser')
+    document.getElementById("browser__results").innerHTML = ""
+});
 
 const favorite_burgerMenu = document.getElementById("favorites_menu");
 favorite_burgerMenu.addEventListener("click", (e) => {
 	showSection('favorites');
-	const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteReadMangas") || [];
-    const favNoviewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoReadMangas") || [];
+	const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteViewedAnimes") || [];
+    const favNoviewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoViewedAnimes") || [];
     displayFavoriteAnimes(favViewedAnimeListLocalStorage, favNoviewedAnimeListLocalStorage);
 
     const favReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];

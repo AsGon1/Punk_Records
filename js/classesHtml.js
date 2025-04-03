@@ -69,6 +69,7 @@ class MangaHTML extends Manga {
         const image = document.createElement("img");
 
         const attributesTitle = document.createElement("ul");
+        attributesTitle.classList.add("titleList");
         const attributesTitleEnglish = document.createElement("li");
         const attributesTitleNative = document.createElement("li");
         const attributesTitleRomaji = document.createElement("li");
@@ -82,9 +83,15 @@ class MangaHTML extends Manga {
         const attributesDescription = document.createElement("li");
 
         const attributesGenres = document.createElement("ul");
+        attributesGenres.classList.add("genres");
+        const attributesGenresTitle = document.createElement("li");
+        attributesGenresTitle.textContent = "Genres:";
+        attributesGenres.appendChild(attributesGenresTitle);
 
         const favButton = document.createElement("button");
+        favButton.classList.add("favButton");
         const readButton = document.createElement("button");
+        readButton.classList.add("readButton");
 
         image.setAttribute("src", this.coverImage.large);
         attributesTitleEnglish.textContent = "English: " + (this.title.english || "");
@@ -191,11 +198,7 @@ class MangaHTML extends Manga {
         for (let i = 0; i < this.genres.length; i++) {
             const genre = document.createElement("li");
             genre.classList.add("attribute", "category");
-            if (i === 0) {
-                genre.textContent = "Genres: " + this.genres[i];
-            } else {
-                genre.textContent += this.genres[i];
-            }
+            genre.textContent += this.genres[i];
             attributesGenres.append(genre);
         }
     }
@@ -258,15 +261,22 @@ class AnimeHTML extends Anime {
         const attributesFormat = document.createElement("h4");
 
         const attributeList = document.createElement("ul");
+        attributesTitle.classList.add("titleList");
         const attributesStartDate = document.createElement("li");
         const attributesEpisodes = document.createElement("li");
         const attributesDuration = document.createElement("li");
         const attributesDescription = document.createElement("li");
 
         const attributesGenres = document.createElement("ul");
+        attributesGenres.classList.add("genres");
+        const attributesGenresTitle = document.createElement("li");
+        attributesGenresTitle.textContent = "Genres:";
+        attributesGenres.appendChild(attributesGenresTitle);
 
         const favButton = document.createElement("button");
+        favButton.classList.add("favButton");
         const viewedButton = document.createElement("button");
+        viewedButton.classList.add("viewedButton");
 
         image.setAttribute("src", this.coverImage.large);
         attributesTitleEnglish.textContent = "English: " + (this.title.english || "");
@@ -378,11 +388,7 @@ class AnimeHTML extends Anime {
         for (let i = 0; i < this.genres.length; i++) {
             const genre = document.createElement("li");
             genre.classList.add("attribute", "category");
-            if (i === 0) {
-                genre.textContent = "Genres: " + this.genres[i];
-            } else {
-                genre.textContent += this.genres[i];
-            }
+            genre.textContent += this.genres[i];
             attributesGenres.append(genre);
         }
     }
@@ -425,7 +431,7 @@ class PunkRecordsHTML {
         browserButton.addEventListener("click", async (e) => {
             await getMangaByTitle(browserInput.value);
 			document.getElementById('browser').classList.remove('hidden');
-			document.getElementById('home__browser').classList.add('hidden');
+			document.getElementById('home').classList.add('hidden');
         });
 
         browserInput.addEventListener("keydown", function (event){
@@ -433,7 +439,7 @@ class PunkRecordsHTML {
             if (code === 'Enter'){
                 getMangaByTitle(browserInput.value);
 				document.getElementById('browser').classList.remove('hidden');
-				document.getElementById('home__browser').classList.add('hidden');
+				document.getElementById('home').classList.add('hidden');
             }
         });
     }
