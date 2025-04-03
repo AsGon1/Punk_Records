@@ -380,7 +380,7 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 #nav-apartados>.menu__burger-link{
 	display:flex;
 }
-.card .book__attributes .description {
+.card .manga__attributes .description {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 10;
@@ -391,15 +391,33 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     display: none;
 }
 
-.card:hover .book__attributes {
+.card:hover .manga__attributes {
     display: flex;
     flex-flow: column;
     gap: 1em;
 }
 
-.card button {
+.card .favButton {
     position: absolute;
     top: 1em;
+    right: 1em;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--main-color-30);
+    color: var(--main-color-10);
+    padding: 1em;
+    border: 2px solid transparent;
+    border-radius: 100%;
+
+    transition: all .3s ease;
+}
+
+.card .readButton, .card .viewedButton {
+    position: absolute;
+    top: 5em;
     right: 1em;
 
     display: flex;
