@@ -6,12 +6,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Punk Records">
 
-	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 		integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-	<link rel="stylesheet" href="css/styles.css">-->
-	<script defer type="module" src="./js/pruebas.js"></script>
+	<link rel="stylesheet" href="css/styles.css">
+	<script defer type="module" src="./js/main.js"></script>
 
 	<title>Punk Records</title>
 </head>
@@ -23,7 +23,7 @@
 		<nav id="menu">
             <div class="menu__logo">
                 <a href="index.html">
-                    <p id="logo-header">Punk Records</p>
+                    <p id="logo-header">PUNK RECORDS</p>
                 </a>
             </div>
             <div class="menu__burger">
@@ -32,10 +32,10 @@
 						<a href="#home" id="home_menu">HOME</a>
 					</li>
                     <li class="menu__burger-link">
-						<a href="#archive" id="favorites_menu">ARCHIVE</a>
+						<a href="#browser" id="browser_menu">BROWSER</a>
 					</li>
                     <li class="menu__burger-link">
-						<a href="#favorites" id="archive_menu">FAVORITES</a>
+						<a href="#favorites" id="favorites_menu">FAVORITES</a>
 					</li>
                 </ul>
 
@@ -53,32 +53,15 @@
 
 		<section id="home" class="content">
 
-            <section id="home__news" class="content "></section>
+			<section id="home__browser" class="content "></section>
 
-			<section id="home__characters" class="content "></section>
-
-			<section id="home__suggestions-anime" class="content "></section>
-
-            <section id="home__suggestions-manga" class="content "></section>
+            <section id="home__suggestions" class="content "></section>
 
 		</section>
 
-        <section id="favorites" class="content hidden">
+		<section id="browser" class="content hidden"></section>
 
-			<section id="favorites__anime" class="content ">
-                <section id="favorites__anime-watch" class="content "></section>
-                <section id="favorites__anime-nextwatch" class="content "></section>
-            </section>
-
-			<section id="favorites__manga" class="content ">
-                <section id="favorites__manga-read" class="content "></section>
-                <section id="favorites__manga-nextread" class="content "></section>
-            </section>
-
-
-		</section>
-
-		<section id="archive" class="content hidden"></section>
+        <section id="favorites" class="content hidden"></section>
 		
 	</main>
 
