@@ -88,7 +88,7 @@ body {
     /* PESO PRINCIPAL DE CARACTERES */
     --main-font-size: 16px;
     /* TAMAÑO PRINCIPAL DE CARACTERES */
-    --main-color-60: #fff6f3;
+    --main-color-60: #fff6f3; /* #fff6f3 */
     /* ROSA */
     --main-color-30: #fd4848;
     /* GRIS OSCURO*/
@@ -372,7 +372,7 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     width: 100%;
 }
 
-.card .manga__attributes {
+.card .manga__attributes, .card .anime__attributes {
     width: 100%;
     display: none;
 }
@@ -387,11 +387,24 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     overflow: hidden;
 }
 
+.card .anime__attributes .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 10;
+    overflow: hidden;
+}
+
 .card:hover h3, .card:hover h4, .card:hover img {
     display: none;
 }
 
 .card:hover .manga__attributes {
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
+}
+
+.card:hover .anime__attributes {
     display: flex;
     flex-flow: column;
     gap: 1em;
@@ -473,3 +486,148 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     border-radius: 20px;
 }
 /* END WISHLIST */
+
+/* FOOTER */
+footer {
+    width: 100vw;
+    padding: 2em 0 0 0;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5em;
+
+    background-color: var(--main-color-30);
+    color: var(--main-color-10);
+}
+
+footer #social, footer #members #members__list, footer #copyright {
+    width: 100%;
+    max-width: 2000px;
+    height: 100%;
+
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2em ;
+}
+
+footer #copyright {
+    background-color: black;
+    width: 100vw;
+    padding: .5em;
+}
+/* END FOOTER */
+
+/*MEDIA*/
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    header {
+        height: 3em;
+    }
+
+    #menu .menu__burger .menu__burger-links  {
+        display: none;
+    }
+
+	#menu .menu__burger .menu__burger-links.active {
+		width: 100%;
+
+    	display: flex;
+    	flex-flow: row;
+        align-items: center;
+        justify-content: center;
+    	gap: .5em;
+
+        position: absolute;
+        top: 3em;
+        left: 0;
+
+        text-align: center;
+        
+        background-color: var(--main-color-30);
+        color: var(--main-color-10);
+	}	
+
+    #menu .menu__burger .menu__burger-links .menu__burger-link {
+        font-size: .8rem;
+    }
+
+    #menu .menu__burger .menu__burger-icon {
+        display: flex;
+    }
+
+    #menu .menu__burger .menu__burger-links .menu__burger-link:hover {
+        background-color: var(--main-color-10);
+        color: black;
+    }
+
+    #menu .menu__logo {
+        font-size: 1.6rem;
+    }
+
+
+    main {
+        margin-top: 0;
+    }
+
+    
+    #home, #browser, #favorites {
+        width: 100vw;
+    }
+
+
+    #home #home__browser{
+        width: 100%;
+        font-size: 1.2rem;
+        display: flex;
+        flex-flow: row;
+        gap: 1em;
+    }
+
+    #home .content{
+        width: 100%;
+        font-size: 1.2rem;
+        display: flex;
+        flex-flow: column;
+        gap: 1em;
+    }
+
+    main #home #home__browser input, #browser #browser__advanceBrowser-input input {
+        width: 100%;
+    }
+
+    .card {
+        margin: 0 10%;
+        gap: .2em;
+    }
+
+    .card h3 {
+        font-size: 2rem;
+    }
+
+    .card .manga__attributes, .card .anime__attributes {
+        display: flex;
+        flex-flow: column;
+        gap: 0;
+    }
+
+    .card .manga__attributes .description {
+        display: none;
+    }
+
+    .card .anime__attributes .description {
+        display: none;
+    }
+
+    footer #members #members__list {
+        flex-flow: column;
+        gap: .2em;
+    }
+}
+/* END MEDIA */

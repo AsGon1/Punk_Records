@@ -82,6 +82,10 @@ class MangaHTML extends Manga {
         const attributesDescription = document.createElement("li");
 
         const attributesGenres = document.createElement("ul");
+        attributesGenres.classList.add("genres");
+        const attributesGenresTitle = document.createElement("li");
+        attributesGenresTitle.textContent = "Genres:";
+        attributesGenres.appendChild(attributesGenresTitle);
 
         const favButton = document.createElement("button");
         favButton.classList.add("favButton");
@@ -180,7 +184,6 @@ class MangaHTML extends Manga {
         this.article.appendChild(attributesFormat);
         this.article.appendChild(attributeList);
 
-        attributesGenres.classList.add("attribute", "genres");
         this.createGenres(attributesGenres);
         this.article.appendChild(attributesGenres);
 
@@ -194,11 +197,7 @@ class MangaHTML extends Manga {
         for (let i = 0; i < this.genres.length; i++) {
             const genre = document.createElement("li");
             genre.classList.add("attribute", "category");
-            if (i === 0) {
-                genre.textContent = "Genres: " + this.genres[i];
-            } else {
-                genre.textContent += this.genres[i];
-            }
+            genre.textContent += this.genres[i];
             attributesGenres.append(genre);
         }
     }
@@ -267,6 +266,10 @@ class AnimeHTML extends Anime {
         const attributesDescription = document.createElement("li");
 
         const attributesGenres = document.createElement("ul");
+        attributesGenres.classList.add("genres");
+        const attributesGenresTitle = document.createElement("li");
+        attributesGenresTitle.textContent = "Genres:";
+        attributesGenres.appendChild(attributesGenresTitle);
 
         const favButton = document.createElement("button");
         favButton.classList.add("favButton");
@@ -383,11 +386,7 @@ class AnimeHTML extends Anime {
         for (let i = 0; i < this.genres.length; i++) {
             const genre = document.createElement("li");
             genre.classList.add("attribute", "category");
-            if (i === 0) {
-                genre.textContent = "Genres: " + this.genres[i];
-            } else {
-                genre.textContent += this.genres[i];
-            }
+            genre.textContent += this.genres[i];
             attributesGenres.append(genre);
         }
     }
