@@ -69,6 +69,7 @@ class MangaHTML extends Manga {
         const image = document.createElement("img");
 
         const attributesTitle = document.createElement("ul");
+        attributesTitle.classList.add("titleList");
         const attributesTitleEnglish = document.createElement("li");
         const attributesTitleNative = document.createElement("li");
         const attributesTitleRomaji = document.createElement("li");
@@ -260,6 +261,7 @@ class AnimeHTML extends Anime {
         const attributesFormat = document.createElement("h4");
 
         const attributeList = document.createElement("ul");
+        attributesTitle.classList.add("titleList");
         const attributesStartDate = document.createElement("li");
         const attributesEpisodes = document.createElement("li");
         const attributesDuration = document.createElement("li");

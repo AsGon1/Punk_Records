@@ -138,7 +138,7 @@ async function displaySuggestions(){
 
     let suggestions = [];
 
-    for (let i = 0; i < 5; i++){
+    for (let i = 0; i < 6; i++){
         let item = await getRandomItem(queryById);
 
         if (MANGAFORMATS.includes(item.format)){ // Se comprueba si el objeto que se ha solicitado tiene el formato adecuado

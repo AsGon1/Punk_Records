@@ -1,6 +1,9 @@
 /*RESET*/
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap');
-
+@font-face{
+    font-family: "ONE PIECE";
+    src: url("../assets/one\ piece\ font.ttf");
+}
 * {
     box-sizing: border-box;
 }
@@ -88,12 +91,12 @@ body {
     /* PESO PRINCIPAL DE CARACTERES */
     --main-font-size: 16px;
     /* TAMAÑO PRINCIPAL DE CARACTERES */
-    --main-color-60: #fff6f3; /* #fff6f3 */
-    /* ROSA */
+    --main-color-60: #fff6f3;
+
     --main-color-30: #fd4848;
-    /* GRIS OSCURO*/
+
     --main-color-10: rgb(255, 255, 255);
-    /* GRIS CLARO*/
+
     --main-border: 1px solid transparent;
     /* BORDE GENERAL PARA ELEMENTOS */
 }
@@ -143,7 +146,7 @@ header {
 }
 
 #menu .menu__logo {
-    font-family: var(--main-font);
+    font-family: "ONE PIECE";
     font-weight: 600;
     font-size: 3rem;
 }
@@ -327,7 +330,7 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: .5em;
+    gap: 1em;
 }
 
 #favorites #favorites__manga-read, #favorites #favorites__manga-not-read {
@@ -335,7 +338,7 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: .5em;
+    gap: 1em;
 }
 
 #favorites #favorites__anime-viewed, #favorites #favorites__anime-not-viewed {
@@ -370,6 +373,7 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 
 .card h3, .card h4 {
     width: 100%;
+    text-align: center;
 }
 
 .card .manga__attributes, .card .anime__attributes {
@@ -394,20 +398,31 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     overflow: hidden;
 }
 
-.card:hover h3, .card:hover h4, .card:hover img {
+.card:hover h3, .card:hover h4 {
     display: none;
 }
+
+
 
 .card:hover .manga__attributes {
     display: flex;
     flex-flow: column;
     gap: 1em;
+    font-size: 14px;
+}
+
+.card:hover .titleList, .card:hover .genres {
+    display: flex;
+    flex-flow: column;
+    gap: 0.3em;
+    font-size: 14px;
 }
 
 .card:hover .anime__attributes {
     display: flex;
     flex-flow: column;
     gap: 1em;
+    font-size: 14px;
 }
 
 .card .favButton {
@@ -444,6 +459,24 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     border-radius: 100%;
 
     transition: all .3s ease;
+}
+
+.card .genres {
+    display:flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 1em;
+
+    width: 100%;
+}
+
+.card:hover .genres {
+    display:flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 1em;
+
+    width: 100%;
 }
 
 .card a {
@@ -485,6 +518,15 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 
     border-radius: 20px;
 }
+
+.card:hover img{
+    width: 100px;
+    height: 120px;
+    object-fit: cover;
+
+    border-radius: 20px;
+}
+
 /* END WISHLIST */
 
 /* FOOTER */
@@ -608,26 +650,32 @@ footer #copyright {
     }
 
     .card h3 {
-        font-size: 2rem;
+        font-size: .3rem;
     }
 
     .card .manga__attributes, .card .anime__attributes {
         display: flex;
         flex-flow: column;
         gap: 0;
+        font-size: 16px;
     }
 
     .card .manga__attributes .description {
         display: none;
     }
 
-    .card .anime__attributes .description {
-        display: none;
+    .card:hover .manga__attributes .description {
+        display: flex;
+    }
+
+    .card:hover .anime__attributes .description {
+        display: flex;
     }
 
     footer #members #members__list {
         flex-flow: column;
         gap: .2em;
     }
+    
 }
 /* END MEDIA */

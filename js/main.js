@@ -10,13 +10,15 @@ home_burgerMenu.addEventListener("click", (e) => {
 
 const browser_burgerMenu = document.getElementById("browser_menu");
 browser_burgerMenu.addEventListener("click", (e) => {
-	showSection('browser')});
+	showSection('browser')
+    document.getElementById("browser__results").innerHTML = ""
+});
 
 const favorite_burgerMenu = document.getElementById("favorites_menu");
 favorite_burgerMenu.addEventListener("click", (e) => {
 	showSection('favorites');
-	const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteReadMangas") || [];
-    const favNoviewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoReadMangas") || [];
+	const favViewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteViewedAnimes") || [];
+    const favNoviewedAnimeListLocalStorage = getAnimeFromLocalStorage("favoriteNoViewedAnimes") || [];
     displayFavoriteAnimes(favViewedAnimeListLocalStorage, favNoviewedAnimeListLocalStorage);
 
     const favReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];
