@@ -22,7 +22,7 @@ En **Punk Records** puedes encontrar una gran variedad de entretenimiento para l
 
 Para hacer funcionar este proyecto solo necesitas un Navegador Web y un Editor de texto (por ejemplo, VS Code). Gracias al uso de GRaph QL no es necesaria ninguna APIkey para solicitar la información.
 
-Las Queries utilizdas en el proyecto se encuentran el la carpeta de JS, pero si es necesario aprender como realizarlas pueds visitar la página web de Anilist, donde se explica como realizar las peticiones.
+Las Queries utilizadas en el proyecto se encuentran el la carpeta de JS, pero si es necesario aprender como realizarlas puedes visitar la página web de Anilist, donde se explica como realizar las peticiones.
 
 Link: [https://docs.anilist.co/guide/introduction](https://docs.anilist.co/guide/introduction)
 
