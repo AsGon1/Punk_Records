@@ -172,6 +172,32 @@ let query6 = `
     }
 `;
 
+let query7 = `
+    query Media {
+        Page(page: 1, perPage: 10) {
+            media(sort: POPULARITY_DESC, type: MANGA) {
+                id
+                title {
+                    romaji
+                    english
+                    native
+                }
+                format
+                status
+                startDate {
+                    year
+                }
+                coverImage {
+                    large
+                }
+                description
+                episodes
+                duration
+            }
+        }
+    }
+`;
+
 // Define our query variables and values that will be used in the query request
 let variables = {
     search: "One Piece"
@@ -188,8 +214,8 @@ let url = 'https://graphql.anilist.co',
             'Accept': 'application/json',
         },
         body: JSON.stringify({
-            query: query,
-            variables: variables
+            query: query7,
+            //variables: variables
         })
     };
 
