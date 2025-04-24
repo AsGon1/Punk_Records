@@ -27,7 +27,6 @@ let mangaByTitle = `
     }
 `;
 
-
 // Query para buscar los animes por titulo
 let animeByTitle = `
     query ($search: String!) {
@@ -110,9 +109,67 @@ query ($id: Int!) {
   }
 }`;
 
+// Esta query obtiene los diez mangas más leidos según la API de Anilist
+let topTenManga = `
+    query Media {
+        Page(page: 1, perPage: 10) {
+            media(sort: POPULARITY_DESC, type: MANGA) {
+                id
+                title {
+                    romaji
+                    english
+                    native
+                }
+                format
+                status
+                startDate {
+                    year
+                }
+                coverImage {
+                    large
+                }
+                description
+                genres
+                chapters
+                volumes
+            }
+        }
+    }
+`;
+
+// Esta query nos permite obtener los diez animes más vistos según la API de Anilist
+let topTenAnime = `
+    query Media {
+        Page(page: 1, perPage: 10) {
+            media(sort: POPULARITY_DESC, type: ANIME) {
+                id
+                title {
+                    romaji
+                    english
+                    native
+                }
+                format
+                status
+                startDate {
+                    year
+                }
+                coverImage {
+                    large
+                }
+                description
+                episodes
+                duration
+                genres
+            }
+        }
+    }
+`;
+
 export{
     mangaByTitle,
     animeByTitle,
     characterByName,
-    queryById
+    queryById,
+    topTenManga,
+    topTenAnime
 }
