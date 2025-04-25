@@ -1,5 +1,5 @@
 import { displayManga, displayAnime, displayCharacter } from "./functions.js";
-import { mangaByTitle, animeByTitle, characterByName, queryById } from "./queries.js";
+import { mangaByTitle, animeByTitle, characterByName, queryById, topTenManga, topTenAnime } from "./queries.js";
 
 let URL = 'https://graphql.anilist.co';
 
@@ -94,10 +94,72 @@ function getRandomInt(min, max){ // Esta funcion nos da un Int entre los valores
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+async function fetchTopMangas() {
+    
+    let OPTIONS = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: topTenManga, //query introducida, en la parte superior tenemos las diferentes posibilidades
+        })
+    };
+
+    try {
+        const response = await fetch(URL, OPTIONS).then(handleResponse)
+                            .then(handleData)
+                            .catch(handleError);
+        return response;
+    }
+    catch(error) {
+        console.error(error);
+    }
+
+}
+
+async function fetchTopAnimes() {
+    
+    let OPTIONS = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: topTenAnime, //query introducida, en la parte superior tenemos las diferentes posibilidades
+        })
+    };
+
+    try {
+        const response = await fetch(URL, OPTIONS).then(handleResponse)
+                            .then(handleData)
+                            .catch(handleError);
+        return response;
+    }
+    catch(error) {
+        console.error(error);
+    }
+
+}
+
+async function getTopMangas(){
+    const result = await fetchTopMangas();
+    return result.data.Page.media;
+}
+
+async function getTopAnimes(){
+    const result = await fetchTopAnimes();
+    return result.data.Page.media;
+}
+
 export {
     getMangaByTitle,
     getAnimeByTitle,
     getCharacterByName,
     getRandomItem,
-    fetchData
+    fetchData,
+    getTopMangas,
+    getTopAnimes
 }

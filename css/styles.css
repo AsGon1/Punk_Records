@@ -219,7 +219,11 @@ main #home #home__browser.hidden {
 	display: none;
 }
 
-main #home #home__suggestions.hidden {
+main #home #home__tops-mangas.hidden {
+	display: none;
+}
+
+main #home #home__tops-animes.hidden {
 	display: none;
 }
 
@@ -229,6 +233,14 @@ main #home #home__browser {
     
     display: flex;
     justify-content: center;
+    padding: 2em 10%;
+
+    gap: .2em;
+}
+
+main #home #home__tops {
+    width: 100%;
+    
     padding: 2em 10%;
 
     gap: .2em;
@@ -325,7 +337,7 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 	display: none;
 }
 
-#browser #browser__results, #home__suggestions {
+#browser #browser__results, #home__tops-mangas, #home__tops-animes {
     width: 100%;
 
     display: grid;

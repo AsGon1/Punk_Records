@@ -1,6 +1,6 @@
 import { MangaHTML, AnimeHTML} from "./classesHtml.js";
 import { mangaByTitle, animeByTitle, characterByName, queryById } from "./queries.js";
-import { getRandomItem } from "./api.js";
+import { getRandomItem, getTopMangas, getTopAnimes } from "./api.js";
 
 const MANGAFORMATS = ["MANGA", "NOVEL", "ONE_SHOT"];
 const ANIMEFORMATS = ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC"];
@@ -206,6 +206,72 @@ function showHomeSection(homeId, section1, section2) {
     document.getElementById(section2).classList.remove('hidden');
 }
 
+async function displayTopMangas(){
+
+    const resultSectionSuggestions = document.getElementById("home__tops-mangas");
+
+    resultSectionSuggestions.innerHTML = "";
+
+    let top = await getTopMangas();
+
+    console.log(top);
+
+    top.forEach(manga => {
+        const mangaCard = new MangaHTML(
+            manga.id,
+            manga.title,
+            manga.format,
+            manga.chapters,
+            manga.volumes,
+            manga.status,
+            manga.startDate,
+            manga.coverImage,
+            manga.description,
+            manga.genres
+        );
+        if (!mangaCard.coverImage) { //si no hay foto, no lo enseñes
+            return
+        } else {
+            console.log(mangaCard);
+            mangaCard.initialize(resultSectionSuggestions);
+        }
+        
+    });
+
+}
+
+async function displayTopAnimes(){
+
+    const resultSectionSuggestions = document.getElementById("home__tops-animes");
+
+    resultSectionSuggestions.innerHTML = "";
+
+    let top = await getTopAnimes();
+
+    console.log(top);
+
+    top.forEach(anime => {
+        const animeCard = new AnimeHTML(
+            anime.id,
+            anime.title,
+            anime.format,
+            anime.episodes,
+            anime.duration,
+            anime.status,
+            anime.startDate,
+            anime.coverImage,
+            anime.description,
+            anime.genres
+        );
+        if (!animeCard.coverImage) { //si no hay foto, no lo enseñes
+            return
+        } else {
+            animeCard.initialize(resultSectionSuggestions);
+        }
+    });
+
+}
+
 export {
     toggleNav,
     displayManga,
@@ -214,6 +280,8 @@ export {
     displayFavoriteMangas,
     displayFavoriteAnimes,
     displaySuggestions,
+    displayTopMangas,
+    displayTopAnimes,
 	showSection,
     showHomeSection
 }

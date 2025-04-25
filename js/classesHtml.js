@@ -5,9 +5,9 @@ import { addMangaToLocalStorageArray, addAnimeToLocalStorageArray, removeMangaFr
         findMangaInLocalStorageArray, findAnimeInLocalStorageArray} from "./localstorage.js";
 
 import { displayManga, displayAnime, displayCharacter, displayFavoriteMangas,
-         displayFavoriteAnimes, displaySuggestions } from "./functions.js";
+         displayFavoriteAnimes, displaySuggestions, displayTopMangas, displayTopAnimes } from "./functions.js";
 
-import { getMangaByTitle, getAnimeByTitle, getCharacterByName } from "./api.js";
+import { getMangaByTitle, getAnimeByTitle, getCharacterByName, getTopMangas } from "./api.js";
 
 
 // GENEROS EXITENTES EN LA API
@@ -408,7 +408,7 @@ class PunkRecordsHTML {
 
     initializeHome() {
         this.initializeHomeBrowser(); // buscador en la pagina de home
-        this.initializeHomeSuggestions(); //Sugerencias de Home
+        this.initializeHomeTop();
     }
 
     initializeHomeBrowser(){
@@ -444,8 +444,26 @@ class PunkRecordsHTML {
         });
     }
 
-    initializeHomeSuggestions(){
-        displaySuggestions();
+    initializeHomeTop(){
+        const topSection = document.getElementById("home__tops");
+
+        topSection.innerHTML = "";
+
+        const topMangasDiv = document.createElement("div");
+        const tituloTopMangas = document.createElement('h1');
+        tituloTopMangas.textContent = "TOP 10 MANGAS";
+        topMangasDiv.setAttribute("id", "home__tops-mangas");
+        
+        const topAnimesDiv = document.createElement("div");
+        const tituloTopAnimes = document.createElement('h1');
+        tituloTopAnimes.textContent = "TOP 10 ANIMES";
+        topAnimesDiv.setAttribute("id", "home__tops-animes");
+
+        topSection.append(tituloTopMangas,topMangasDiv, tituloTopAnimes, topAnimesDiv);
+
+        displayTopMangas();
+        displayTopAnimes();
+
     }
 
     initializeBrowser(){

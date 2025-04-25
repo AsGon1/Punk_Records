@@ -4,7 +4,7 @@ import { getMangaFromLocalStorage, getAnimeFromLocalStorage} from "./localstorag
 
 const home_burgerMenu = document.getElementById("home_menu");
 home_burgerMenu.addEventListener("click", (e) => {
-    showHomeSection('home', 'home__browser', 'home__suggestions');
+    showHomeSection('home', 'home__browser', 'home__tops');
     displaySuggestions();
 });
 
@@ -24,6 +24,11 @@ favorite_burgerMenu.addEventListener("click", (e) => {
     const favReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteReadMangas") || [];
     const favNoReadMangaListLocalStorage = getMangaFromLocalStorage("favoriteNoReadMangas") || [];
     displayFavoriteMangas(favReadMangaListLocalStorage, favNoReadMangaListLocalStorage);
+});
+
+const login_burgerMenu = document.getElementById("login_menu");
+login_burgerMenu.addEventListener("click", (e) => {
+	showSection('login')
 });
 
 const menu_burgerIcon = document.getElementById("burger_icon");
