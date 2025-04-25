@@ -31,6 +31,11 @@ login_burgerMenu.addEventListener("click", (e) => {
 	showSection('login')
 });
 
+const register= document.getElementById("register_button");
+register.addEventListener("click", (e) => {
+	showSection('register')
+});
+
 const menu_burgerIcon = document.getElementById("burger_icon");
 menu_burgerIcon.addEventListener("click", (e) => {
 	toggleNav()

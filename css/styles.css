@@ -240,7 +240,7 @@ main #home #home__browser {
 
 main #home #home__tops {
     width: 100%;
-    
+
     padding: 2em 10%;
 
     gap: .2em;
@@ -414,8 +414,6 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     display: none;
 }
 
-
-
 .card:hover .manga__attributes {
     display: flex;
     flex-flow: column;
@@ -542,6 +540,177 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
 }
 
 /* END WISHLIST */
+
+/* FORMULARIOs */
+#login {
+    width: 100vw;
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+
+    font-family: var(--second-font);
+    margin-top: 3em;
+}
+
+#login.hidden {
+	display: none;
+}
+
+#login #login__form {
+    border-radius: 20px;
+    color: black;
+
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
+
+    padding: 2em 10%;
+
+    width: 100%;
+    min-width: 200px;
+    max-width: 700px;
+}
+
+#login h1, #login p {
+    text-align: center;
+}
+
+#login h1 {
+    margin: 0%;
+}
+
+#login #login__form input,
+#login #login__form textarea {
+    width: 100%;
+
+    background-color: var(--main-color-10);
+    border: 2px solid var(--main-color-30);
+    border-radius: 20px;
+
+    font-family: var(--second-font);
+    font-size: 1em;
+    color: black;
+
+    padding: 1em;
+}
+
+#login #login__form button {
+    width: 100%;
+    padding: .5em 1em;
+    background-color: var(--main-color-30);
+    color: var(--main-color-10);
+    border: 2px solid transparent;
+
+    border: none;
+    border-radius: 20px;
+
+    font-family: var(--main-font);
+    font-size: 1.2em;
+
+    transition: all .3s ease;
+}
+
+#login a {
+
+    display: flex;
+    padding: .5em 1em;
+    gap: 1em;
+
+    background-color: var(--main-color-30);
+    color: var(--main-color-10);
+    border: 2px solid transparent;
+
+    border: none;
+    border-radius: 20px;
+
+    font-family: var(--main-font);
+    font-size: 1.2em;
+
+    transition: all .3s ease;
+
+    width: 100%;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+#login #login__form button:hover, #login a:hover {
+    background-color: var(--main-color-10);
+    color: var(--main-color-30);
+    border: 2px solid var(--main-color-30);
+}
+
+#register {
+    width: 100vw;
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+
+    font-family: var(--second-font);
+    margin-top: 3em;
+}
+
+#register.hidden {
+	display: none;
+}
+
+#register #register__form {
+    border-radius: 20px;
+    color: black;
+
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
+
+    padding: 2em 10%;
+
+    width: 100%;
+    min-width: 200px;
+    max-width: 700px;
+}
+
+#register h1 {
+    text-align: center;
+    margin: 0%;
+}
+
+#register #register__form input,
+#register #register__form textarea {
+    width: 100%;
+
+    background-color: var(--main-color-10);
+    border: 2px solid var(--main-color-30);
+    border-radius: 20px;
+
+    font-family: var(--second-font);
+    font-size: 1em;
+    color: black;
+
+    padding: 1em;
+}
+
+#register #register__form button {
+    width: 100%;
+    padding: .5em 1em;
+    background-color: var(--main-color-30);
+    color: var(--main-color-10);
+    border: 2px solid transparent;
+
+    border: none;
+    border-radius: 20px;
+
+    font-family: var(--main-font);
+    font-size: 1.2em;
+
+    transition: all .3s ease;
+}
+
+#register #register__form button:hover {
+    background-color: var(--main-color-10);
+    color: var(--main-color-30);
+    border: 2px solid var(--main-color-30);
+}
+
+/* END FORMULARIO */
 
 /* FOOTER */
 footer {

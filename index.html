@@ -76,7 +76,20 @@
 				<button type="submit">Log In</button>
 			</form>
 			<p>You don't have an account yet?</p>
-			<a href="http://localhost:3010/register">Register</a>
+			<a href="#register" id="register_button">Register</a>
+		</section>
+
+		<section id="register" class="content hidden">
+			<h1>CREATE AN ACCOUNT</h1>
+			<form id="register__form">
+				<label for="nickname">Nickname</label>
+				<input type="text" name="nickname" id="nickname__input" placeholder="User Nickname">
+				<label for="email">Email</label>
+				<input type="text" name="email" id="email__input" placeholder="User Email">
+				<label for="password">Password</label>
+				<input type="text" name="password" id="password__input" placeholder="User Password">
+				<button type="submit">Register</button>
+			</form>
 		</section>
 		
 	</main>
