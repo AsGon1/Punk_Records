@@ -71,6 +71,7 @@ class MangaHTML extends Manga {
         const attributesTitle = document.createElement("ul");
         attributesTitle.classList.add("titleList");
         const attributesTitleEnglish = document.createElement("li");
+        attributesTitleEnglish.setAttribute("id", "titleList__english")
         const attributesTitleNative = document.createElement("li");
         const attributesTitleRomaji = document.createElement("li");
 

@@ -610,6 +610,14 @@ main #home #home__browser button:hover, #browser #browser__advanceBrowser-input 
     transition: all .3s ease;
 }
 
+#login #login__register {
+    width: 100%;
+
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+}
+
 #login a {
 
     display: flex;
